@@ -13,6 +13,8 @@ import Classes.ContaPoupanca;
 import Classes.Deposito;
 import Classes.Endereco;
 import Classes.Extrato;
+import Hibernate.ClasseDAO;
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -26,7 +28,13 @@ import static javax.swing.JOptionPane.ERROR_MESSAGE;
  *
  * @author FábioJunior
  */
-public class TelaGerente extends javax.swing.JFrame {
+public class TelaGerente extends javax.swing.JFrame implements Serializable {
+
+    private static final long serialVersionUID = -2L;
+
+    ClasseDAO dao = new ClasseDAO();
+
+    Extrato extrato = new Extrato();
 
     public void limpaAtivo() {
         varAtivo2.setSelectedItem("Ativo");
@@ -101,7 +109,7 @@ public class TelaGerente extends javax.swing.JFrame {
             varCidade.setText(cli.getCli().getEndereco().getCidade());
             varComplemento.setText(cli.getCli().getEndereco().getComplemento());
             varCpf.setText(cli.getCli().getCpf());
-            varDataNascimento.setText(removeEspaco(cli.getCli().getDataNasc()));
+            varDataNascimento.setText(removeEspaco("" + cli.getCli().getDataNasc()));
             varEmail.setText(cli.getEmail());
             varEstado.setText(cli.getCli().getEndereco().getEstado());
             varIdade.setValue(cli.getCli().getIdade());
@@ -115,7 +123,7 @@ public class TelaGerente extends javax.swing.JFrame {
             varSenha.setText(cli.getSenha());
             varTelefone.setText(cli.getCli().getTelefone());
             varNumeroConta.setText(cli.getNumero());
-            if(cli.isAtivo()) {
+            if (cli.isAtivo()) {
                 varAtivo.setSelectedItem("Ativo");
             } else {
                 varAtivo.setSelectedItem("Inativo");
@@ -137,7 +145,7 @@ public class TelaGerente extends javax.swing.JFrame {
             varCidade.setText(cli.getCli().getEndereco().getCidade());
             varComplemento.setText(cli.getCli().getEndereco().getComplemento());
             varCpf.setText(cli.getCli().getCpf());
-            varDataNascimento.setText(removeEspaco(cli.getCli().getDataNasc()));
+            varDataNascimento.setText("" + cli.getCli().getDataNasc());
             varEmail.setText(cli.getEmail());
             varEstado.setText(cli.getCli().getEndereco().getEstado());
             varIdade.setValue(cli.getCli().getIdade());
@@ -151,13 +159,13 @@ public class TelaGerente extends javax.swing.JFrame {
             varSenha.setText(cli.getSenha());
             varTelefone.setText(cli.getCli().getTelefone());
             varNumeroConta.setText(removeEspaco(cli.getNumero()));
-            vardtaCriacao.setText(removeEspaco(cli.getDtaCriacao()));
-            if(cli.isAtivo()) {
+            vardtaCriacao.setText(removeEspaco("" + cli.getDtaCriacao()));
+            if (cli.isAtivo()) {
                 varAtivo.setSelectedItem("Ativo");
             } else {
                 varAtivo.setSelectedItem("Inativo");
             }
-            
+
         } else if (c instanceof ContaCorrenteLimitada) {
             ContaCorrenteLimitada cli = new ContaCorrenteLimitada();
             cli = (ContaCorrenteLimitada) c;
@@ -174,7 +182,7 @@ public class TelaGerente extends javax.swing.JFrame {
             varCidade.setText(cli.getCli().getEndereco().getCidade());
             varComplemento.setText(cli.getCli().getEndereco().getComplemento());
             varCpf.setText(cli.getCli().getCpf());
-            varDataNascimento.setText(removeEspaco(cli.getCli().getDataNasc()));
+            varDataNascimento.setText(removeEspaco("" + cli.getCli().getDataNasc()));
             varEmail.setText(cli.getEmail());
             varEstado.setText(cli.getCli().getEndereco().getEstado());
             varIdade.setValue(cli.getCli().getIdade());
@@ -189,7 +197,7 @@ public class TelaGerente extends javax.swing.JFrame {
             varTelefone.setText(cli.getCli().getTelefone());
             varNumeroConta.setText(cli.getNumero());
             varLimite.setText("" + cli.getLimite());
-            if(cli.isAtivo()) {
+            if (cli.isAtivo()) {
                 varAtivo.setSelectedItem("Ativo");
             } else {
                 varAtivo.setSelectedItem("Inativo");
@@ -241,7 +249,7 @@ public class TelaGerente extends javax.swing.JFrame {
             cp.setSenha(varSenha.getText());
             cp.setTipo(varTipo.getSelectedItem().toString());
             cp.getCli().setCpf(varCpf.getText());
-            cp.getCli().setDataNasc(varDataNascimento.getText());
+            cp.getCli().setDataNasc(extrato.converteData(varDataNascimento.getText()));
             cp.getCli().setIdade(converteInt1(varIdade.getValue().toString()));
             cp.getCli().setNome(varNome.getText());
             cp.getCli().setRg(varRg.getText());
@@ -269,7 +277,7 @@ public class TelaGerente extends javax.swing.JFrame {
             cp.setSenha(varSenha.getText());
             cp.setTipo(varTipo.getSelectedItem().toString());
             cp.getCli().setCpf(varCpf.getText());
-            cp.getCli().setDataNasc(varDataNascimento.getText());
+            cp.getCli().setDataNasc(extrato.converteData(varDataNascimento.getText()));
             cp.getCli().setIdade(converteInt1(varIdade.getValue().toString()));
             cp.getCli().setNome(varNome.getText());
             cp.getCli().setRg(varRg.getText());
@@ -297,7 +305,7 @@ public class TelaGerente extends javax.swing.JFrame {
             cp.setSenha(varSenha.getText());
             cp.setTipo(varTipo.getSelectedItem().toString());
             cp.getCli().setCpf(varCpf.getText());
-            cp.getCli().setDataNasc(varDataNascimento.getText());
+            cp.getCli().setDataNasc(extrato.converteData(varDataNascimento.getText()));
             cp.getCli().setIdade(converteInt1(varIdade.getValue().toString()));
             cp.getCli().setNome(varNome.getText());
             cp.getCli().setRg(varRg.getText());
@@ -424,7 +432,6 @@ public class TelaGerente extends javax.swing.JFrame {
         btnCorrenteComum = new javax.swing.JRadioButton();
         btnCorrenteLimitada = new javax.swing.JRadioButton();
         btnSair = new javax.swing.JButton();
-        jLabel25 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
         jPanel10 = new javax.swing.JPanel();
@@ -435,12 +442,10 @@ public class TelaGerente extends javax.swing.JFrame {
         jLabel27 = new javax.swing.JLabel();
         btnSalvar2 = new javax.swing.JButton();
         varBuscar2 = new javax.swing.JButton();
-        jLabel29 = new javax.swing.JLabel();
         btnCc = new javax.swing.JRadioButton();
         btnCl = new javax.swing.JRadioButton();
         jPanel3 = new javax.swing.JPanel();
         jPanel12 = new javax.swing.JPanel();
-        jLabel32 = new javax.swing.JLabel();
         jPanel13 = new javax.swing.JPanel();
         varAtivo2 = new javax.swing.JComboBox<>();
         btnSalvar3 = new javax.swing.JButton();
@@ -453,7 +458,6 @@ public class TelaGerente extends javax.swing.JFrame {
         btnCorrenteLimitada3 = new javax.swing.JRadioButton();
         jPanel14 = new javax.swing.JPanel();
         jPanel15 = new javax.swing.JPanel();
-        jLabel33 = new javax.swing.JLabel();
         varDataInicio = new javax.swing.JFormattedTextField();
         jLabel34 = new javax.swing.JLabel();
         varNumConta = new javax.swing.JTextField();
@@ -979,8 +983,6 @@ public class TelaGerente extends javax.swing.JFrame {
             }
         });
 
-        jLabel25.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interface/Outubro-Rosa.png"))); // NOI18N
-
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
         jPanel9Layout.setHorizontalGroup(
@@ -1007,10 +1009,8 @@ public class TelaGerente extends javax.swing.JFrame {
                                 .addComponent(btnSalvarAlteracoes, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addGap(81, 81, 81)
-                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnSair)
-                    .addComponent(jLabel25))
+                .addGap(106, 106, 106)
+                .addComponent(btnSair)
                 .addGap(25, 25, 25))
         );
         jPanel9Layout.setVerticalGroup(
@@ -1027,18 +1027,12 @@ public class TelaGerente extends javax.swing.JFrame {
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnOkBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(varBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel9Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnCriarNovoCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnSalvarAlteracoes, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel25)
-                        .addGap(32, 32, 32))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnCriarNovoCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSalvarAlteracoes, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(47, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -1053,7 +1047,7 @@ public class TelaGerente extends javax.swing.JFrame {
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 397, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -1066,7 +1060,7 @@ public class TelaGerente extends javax.swing.JFrame {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 579, Short.MAX_VALUE)
+            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 579, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Cadastro e Alteração ", jPanel1);
@@ -1151,8 +1145,6 @@ public class TelaGerente extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jLabel29.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interface/Outubro-Rosa.png"))); // NOI18N
-
         btnCc.setBackground(new java.awt.Color(204, 204, 0));
         buttonGroup2.add(btnCc);
         btnCc.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
@@ -1173,15 +1165,12 @@ public class TelaGerente extends javax.swing.JFrame {
             .addGroup(jPanel10Layout.createSequentialGroup()
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel10Layout.createSequentialGroup()
-                        .addGap(350, 350, 350)
-                        .addComponent(jLabel29))
-                    .addGroup(jPanel10Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(btnCc))
                     .addGroup(jPanel10Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(btnCl)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(641, Short.MAX_VALUE))
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1190,9 +1179,7 @@ public class TelaGerente extends javax.swing.JFrame {
                 .addComponent(btnCc)
                 .addGap(18, 18, 18)
                 .addComponent(btnCl)
-                .addGap(22, 22, 22)
-                .addComponent(jLabel29)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(92, 92, 92)
                 .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(215, Short.MAX_VALUE))
         );
@@ -1222,8 +1209,6 @@ public class TelaGerente extends javax.swing.JFrame {
         jTabbedPane1.addTab("Estorno de Lançamento", jPanel2);
 
         jPanel12.setBackground(new java.awt.Color(204, 204, 0));
-
-        jLabel32.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interface/Outubro-Rosa.png"))); // NOI18N
 
         jPanel13.setBackground(new java.awt.Color(255, 0, 153));
 
@@ -1334,9 +1319,6 @@ public class TelaGerente extends javax.swing.JFrame {
             .addGroup(jPanel12Layout.createSequentialGroup()
                 .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel12Layout.createSequentialGroup()
-                        .addGap(339, 339, 339)
-                        .addComponent(jLabel32))
-                    .addGroup(jPanel12Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(btnPoupanca3))
                     .addGroup(jPanel12Layout.createSequentialGroup()
@@ -1345,7 +1327,7 @@ public class TelaGerente extends javax.swing.JFrame {
                     .addGroup(jPanel12Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(btnCorrenteLimitada3)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(641, Short.MAX_VALUE))
         );
         jPanel12Layout.setVerticalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1356,9 +1338,7 @@ public class TelaGerente extends javax.swing.JFrame {
                 .addComponent(btnCorrenteComum3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnCorrenteLimitada3)
-                .addGap(60, 60, 60)
-                .addComponent(jLabel32)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(125, 125, 125)
                 .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(190, Short.MAX_VALUE))
         );
@@ -1377,8 +1357,6 @@ public class TelaGerente extends javax.swing.JFrame {
         jTabbedPane1.addTab("Bloqueio e Desbloqueio", jPanel3);
 
         jPanel15.setBackground(new java.awt.Color(204, 204, 0));
-
-        jLabel33.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interface/Outubro-Rosa.png"))); // NOI18N
 
         try {
             varDataInicio.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
@@ -1473,37 +1451,28 @@ public class TelaGerente extends javax.swing.JFrame {
             .addGroup(jPanel15Layout.createSequentialGroup()
                 .addGap(54, 54, 54)
                 .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel15Layout.createSequentialGroup()
+                    .addComponent(jLabel35)
+                    .addComponent(varNumConta, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(jPanel15Layout.createSequentialGroup()
+                            .addComponent(varLimpar4, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnOk4, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel35)
-                            .addComponent(varNumConta, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 370, Short.MAX_VALUE)
-                        .addComponent(jLabel33))
-                    .addGroup(jPanel15Layout.createSequentialGroup()
-                        .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(jPanel15Layout.createSequentialGroup()
-                                .addComponent(varLimpar4, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnOk4, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(varDtaFim, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel36)
-                                .addComponent(jLabel34)
-                                .addComponent(varDataInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                            .addComponent(varDtaFim, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel36)
+                            .addComponent(jLabel34)
+                            .addComponent(varDataInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(480, Short.MAX_VALUE))
             .addComponent(jPanel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel15Layout.setVerticalGroup(
             jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel15Layout.createSequentialGroup()
-                .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel33)
-                    .addGroup(jPanel15Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel35)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(varNumConta, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap()
+                .addComponent(jLabel35)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(varNumConta, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel34)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1620,23 +1589,24 @@ public class TelaGerente extends javax.swing.JFrame {
 
                 /*Conta conta, String senha, String nome, String rg, String cpf, String telefone,
                 Endereco endereco, int id*/
+                Extrato ex = new Extrato();
                 Cliente cli = new Cliente(varNome.getText(), varRg.getText(), varCpf.getText(),
-                        varTelefone.getText(), varDataNascimento.getText(),
+                        varTelefone.getText(), ex.converteData(varDataNascimento.getText()),
                         converteInt(varIdade.getValue().toString()), end);
 
-                c1 = new ContaPoupanca(data, varNumeroConta.getText(), varAgencia.getText(),
+                c1 = new ContaPoupanca(ex.converteData(data), varNumeroConta.getText(), varAgencia.getText(),
                         converteDouble(varSaldo.getText()),
                         varTipo.getSelectedItem().toString(), varSenha.getText(),
                         varEmail.getText(), converteDouble(varRendaMensal.getText()),
                         verificaAtivo(varAtivo.getSelectedItem().toString()), cli);
-
-                if (c.criaPasta(varNumeroConta.getText(), c1) == true) {
+                dao.cadastrar(c1);
+                /*if (c.criaPasta(varNumeroConta.getText(), c1) == true) {
                     JOptionPane.showMessageDialog(this, "Conta Criada com Sucesso!!\n"
                             + "Acesse novamente a página para visualizar");
                     limpar();
                 } else {
                     JOptionPane.showMessageDialog(null, "A Conta Já existe!!");
-                }
+                }*/
             } else if (varTipo.getSelectedItem().toString().equals("Corrente Comum")) {
 
                 Endereco end = new Endereco(varRua.getText(), varNumero.getText(), varComplemento.getText(),
@@ -1646,7 +1616,7 @@ public class TelaGerente extends javax.swing.JFrame {
                 /*Conta conta, String senha, String nome, String rg, String cpf, String telefone,
                 Endereco endereco, int id*/
                 Cliente cli = new Cliente(varNome.getText(), varRg.getText(), varCpf.getText(),
-                        varTelefone.getText(), varDataNascimento.getText(),
+                        varTelefone.getText(), extrato.converteData(varDataNascimento.getText()),
                         converteInt(varIdade.getValue().toString()), end);
 
                 c2 = new ContaCorrenteComum(varNumeroConta.getText(), varAgencia.getText(),
@@ -1671,7 +1641,7 @@ public class TelaGerente extends javax.swing.JFrame {
                 /*Conta conta, String senha, String nome, String rg, String cpf, String telefone,
                 Endereco endereco, int id*/
                 Cliente cli = new Cliente(varNome.getText(), varRg.getText(), varCpf.getText(),
-                        varTelefone.getText(), varDataNascimento.getText(),
+                        varTelefone.getText(), extrato.converteData(varDataNascimento.getText()),
                         converteInt(varIdade.getValue().toString()), end);
                 double limite = Double.valueOf(varLimite.getText());
                 c3 = new ContaCorrenteLimitada(limite, varNumeroConta.getText(), varAgencia.getText(),
@@ -1745,27 +1715,27 @@ public class TelaGerente extends javax.swing.JFrame {
             dp = new Deposito(ccc.getNumero(), ccc.getAgencia(), converteDouble1(varValorExtorno.getText()),
                     ccc.getCli().getTelefone());
             dp.deposita(dp, ccc);
-            String d = "Estorno no Valor de R$" + varValorExtorno.getText() + "\nPropietário da Conta: " + ccc.getCli().getNome() + 
-                    "\n";
+            String d = "Estorno no Valor de R$" + varValorExtorno.getText() + "\nPropietário da Conta: " + ccc.getCli().getNome()
+                    + "\n";
             varNumeroConta2.setText("");
             varValorExtorno.setText("");
             btnSalvar2.setEnabled(false);
-            
+
             et.gravaLog(ccc.getNumero(), d);
-            
+
         } else if (btnCl.isSelected()) {
             ContaCorrenteLimitada ccc = new ContaCorrenteLimitada();
             ccc = (ContaCorrenteLimitada) ob;
             dp = new Deposito(ccc.getNumero(), ccc.getAgencia(), converteDouble1(varValorExtorno.getText()),
                     ccc.getCli().getTelefone());
             dp.deposita(dp, ccc);
-            String d = "Estorno no Valor de R$" + varValorExtorno.getText() + "\nPropietário da Conta: " + ccc.getCli().getNome() +
-                    "\n";
+            String d = "Estorno no Valor de R$" + varValorExtorno.getText() + "\nPropietário da Conta: " + ccc.getCli().getNome()
+                    + "\n";
             varNumeroConta2.setText("");
             varValorExtorno.setText("");
             btnSalvar2.setEnabled(false);
             et.gravaLog(ccc.getNumero(), d);
-        }else {
+        } else {
             JOptionPane.showMessageDialog(null, "Selecione um tipo de Conta Por Favor!", "", ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnSalvar2ActionPerformed
@@ -1911,17 +1881,17 @@ public class TelaGerente extends javax.swing.JFrame {
     private void btnOk4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOk4ActionPerformed
         Extrato ex = new Extrato();
         try {
-        varDados.setText(ex.extratoPeriodo(varNumConta.getText(), varDataInicio.getText(), varDtaFim.getText()));
-        varNumConta.setText("");
-        varDataInicio.setText("");
-        varDtaFim.setText("");
-        }catch(NullPointerException e) {
+            varDados.setText(ex.extratoPeriodo(varNumConta.getText(), varDataInicio.getText(), varDtaFim.getText()));
+            varNumConta.setText("");
+            varDataInicio.setText("");
+            varDtaFim.setText("");
+        } catch (NullPointerException e) {
             JOptionPane.showMessageDialog(null, "Nenhuma Conta Encontrada ou não há extrato!");
         }
     }//GEN-LAST:event_btnOk4ActionPerformed
 
     private void varLimpar4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_varLimpar4ActionPerformed
-       varDados.setText(""); // TODO add your handling code here:
+        varDados.setText(""); // TODO add your handling code here:
     }//GEN-LAST:event_varLimpar4ActionPerformed
 
     private void varDataInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_varDataInicioActionPerformed
@@ -2005,16 +1975,12 @@ public class TelaGerente extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
-    private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
-    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel31;
-    private javax.swing.JLabel jLabel32;
-    private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel36;

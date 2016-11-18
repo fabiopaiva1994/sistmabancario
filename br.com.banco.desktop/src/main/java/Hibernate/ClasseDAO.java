@@ -23,7 +23,7 @@ public class ClasseDAO {
     private static final long serialVersionUID = 1L;
     private Session session = HibernateUtil.getSessionFactory().openSession();
 
-    public void cadastrarAluno(Object a) {
+    public void cadastrar(Object a) {
         org.hibernate.Transaction tx = this.session.beginTransaction();
         this.session.save(a);
         tx.commit();

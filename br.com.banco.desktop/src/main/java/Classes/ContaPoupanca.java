@@ -16,6 +16,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
 import javax.swing.JOptionPane;
 
 /**
@@ -29,6 +30,7 @@ public class ContaPoupanca extends Conta implements Serializable{
     private static final long serialVersionUID = -2L;
     
     @Column(name = "dtaCriacao", nullable = false)
+    @Temporal(javax.persistence.TemporalType.DATE)
     private Date dtaCriacao;
     
     public ContaPoupanca(Date dtaCriacao, String numero, String agencia, double saldo, String tipo,

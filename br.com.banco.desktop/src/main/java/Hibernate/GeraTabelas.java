@@ -1,11 +1,6 @@
 package Hibernate;
 
-import org.hibernate.tool.hbm2ddl.SchemaExport;
 import Classes.*;
-import java.io.Serializable;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import org.hibernate.cfg.Configuration;
 
 /*public class GeraTabelas implements Serializable{
 

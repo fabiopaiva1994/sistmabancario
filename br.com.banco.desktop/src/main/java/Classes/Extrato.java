@@ -94,7 +94,7 @@ public class Extrato implements Serializable{
     public Date converteData(String data) {
         try {
             String dta = data;
-            dta = dta.replace(".", "/");
+            dta = dta.replace("/", "/");
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             Date dt = sdf.parse(dta);
             return dt;

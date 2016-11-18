@@ -7,8 +7,9 @@
         <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/BancoDesktop</property>
         <property name="hibernate.connection.username">postgres</property>
         <property name="hibernate.connection.password">ju1nior2</property>
-  
+        
         <!--<mapping class = "BancoDesktop.cliente.Cliente"/>
+        <mapping class = "BancoDesktop.deposito.Deposito"/>
         <mapping class = "BancoDesktop.pessoa.Pessoa"/>
         <mapping class = "BancoDesktop.endereco.Endereco"/>
         <mapping class = "BancoDesktop.conta.Conta"/>
@@ -16,6 +17,6 @@
         <mapping class = "BancoDesktop.contacorrentecomum.ContaCorrenteComum"/>
         <mapping class = "BancoDesktop.contacorrentelimitada.ContaCorrenteLimitada"/>
         <mapping class = "BancoDesktop.extrato.Extrato"/> -->
-  
+       
     </session-factory>
 </hibernate-configuration>
