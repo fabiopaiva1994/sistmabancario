@@ -761,6 +761,9 @@
                               <Font name="Ubuntu" size="18" style="1"/>
                             </Property>
                           </Properties>
+                          <Events>
+                            <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="varNumeroContaFocusLost"/>
+                          </Events>
                         </Component>
                         <Component class="javax.swing.JLabel" name="jLabel6">
                           <Properties>
@@ -1169,15 +1172,10 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jPanel11" alignment="1" max="32767" attributes="0"/>
                           <Group type="102" attributes="0">
+                              <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="btnCc" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="btnCl" min="-2" max="-2" attributes="0"/>
-                                  </Group>
+                                  <Component id="btnCc" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="btnCl" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace pref="641" max="32767" attributes="0"/>
                           </Group>
@@ -1401,19 +1399,11 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="jPanel13" alignment="0" max="32767" attributes="0"/>
                       <Group type="102" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="btnPoupanca3" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="btnCorrenteComum3" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="btnCorrenteLimitada3" min="-2" max="-2" attributes="0"/>
-                              </Group>
+                              <Component id="btnPoupanca3" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="btnCorrenteComum3" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="btnCorrenteLimitada3" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace pref="641" max="32767" attributes="0"/>
                       </Group>

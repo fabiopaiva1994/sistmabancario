@@ -13,6 +13,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Collection;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -57,7 +58,7 @@ public class Conta implements Serializable {
     private double rendaMensal;
     @Column(name = "ativo", nullable = false)
     private boolean ativo;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "Cliente_FK")
     private Cliente cli;
     @OneToMany(fetch = FetchType.LAZY) 
@@ -88,6 +89,8 @@ public class Conta implements Serializable {
     public void setId(long id) {
         this.id = id;
     }
+
+   
 
     public Collection<Extrato> getExtrato() {
         return extrato;

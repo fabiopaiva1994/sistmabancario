@@ -5,13 +5,16 @@
  */
 package Hibernate;
 
-
+import Classes.ContaCorrenteComum;
+import Classes.ContaCorrenteLimitada;
+import Classes.ContaPoupanca;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.transaction.RollbackException;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.TransactionException;
 import org.hibernate.criterion.Restrictions;
 
 /**
@@ -23,11 +26,20 @@ public class ClasseDAO {
     private static final long serialVersionUID = 1L;
     private Session session = HibernateUtil.getSessionFactory().openSession();
 
-    public void cadastrar(Object a) {
-        org.hibernate.Transaction tx = this.session.beginTransaction();
-        this.session.save(a);
-        tx.commit();
-        session.close();
+    public boolean cadastrar(Object a) {
+        try {
+            org.hibernate.Transaction tx = this.session.beginTransaction();
+            this.session.save(a);
+            tx.commit();
+            //session.close();
+            return true;
+        } catch (HibernateException e) {
+            e.printStackTrace();
+            return false;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public void alterarAluno(Object a) {
@@ -40,18 +52,18 @@ public class ClasseDAO {
             JOptionPane.showMessageDialog(null, "Ocorreu um erro contate o Suporte");
         }
     }
-    
+
     public void alteraEquipamento(Object eq) {
         try {
             org.hibernate.Transaction tx = this.session.beginTransaction();
             this.session.update(eq);
             tx.commit();
             this.session.close();
-        }catch(HibernateException err) {
+        } catch (HibernateException err) {
             JOptionPane.showMessageDialog(null, "Ocorreu um erro contate o Suporte");
         }
     }
-    
+
     public void alterarAtendente(Object a) {
         try {
             org.hibernate.Transaction tx = this.session.beginTransaction();
@@ -62,7 +74,7 @@ public class ClasseDAO {
             JOptionPane.showMessageDialog(null, "Ocorreu um erro contate o suporte");
         }
     }
-    
+
     public void alterarAdministrador(Object a) {
         try {
             org.hibernate.Transaction tx = this.session.beginTransaction();
@@ -73,7 +85,7 @@ public class ClasseDAO {
             JOptionPane.showMessageDialog(null, "Ocorreu um erro contate o suporte");
         }
     }
-    
+
     public void alterarPersonal(Object a) {
         try {
             org.hibernate.Transaction tx = this.session.beginTransaction();
@@ -99,7 +111,6 @@ public class ClasseDAO {
     public Object procura(String nome) {
         return (Object) this.session.load(Object.class, nome);
     }
-    
 
     public List<Object> listaTudo() {
         return this.session.createCriteria(
@@ -125,33 +136,33 @@ public class ClasseDAO {
         session.beginTransaction();
         return this.session.createCriteria(Object.class).list();
     }
-    
-    
+
     public Object buscarNomeEquipamento(String nome) {
-       session.beginTransaction();
-       Criteria cri = session.createCriteria(Object.class)
-               .add(Restrictions.eq("nomeequip", nome));
-       return (Object) cri.uniqueResult();
+        session.beginTransaction();
+        Criteria cri = session.createCriteria(Object.class)
+                .add(Restrictions.eq("nomeequip", nome));
+        return (Object) cri.uniqueResult();
     }
-    
+
     public Object buscaCodEqui(String cod) {
         session.beginTransaction();
         Criteria cri = session.createCriteria(Object.class)
                 .add(Restrictions.eq("idEquipamento", cod));
         return (Object) cri.uniqueResult();
     }
-    
+
     public List<Object> buscarEquipamento() {
         session.beginTransaction();
         return session.createCriteria(Object.class).list();
     }
 
     public Object bucar(String nome) {
-        try {session.beginTransaction();
-        Criteria cri = session.createCriteria(Object.class)
-                .add(Restrictions.eq("nome", nome));
-        return (Object) cri.uniqueResult();
-        }catch(HibernateException erro) {
+        try {
+            session.beginTransaction();
+            Criteria cri = session.createCriteria(Object.class)
+                    .add(Restrictions.eq("nome", nome));
+            return (Object) cri.uniqueResult();
+        } catch (HibernateException erro) {
             JOptionPane.showMessageDialog(null, "Houve um Erro contate o suporte");
             return null;
         }
@@ -164,13 +175,47 @@ public class ClasseDAO {
         return (List<Object>) cri.list();
     }
 
-    public Object procuraNome(String nome) {
+    public Object procuraConta(Object obj, String numero, String agencia) {
+        session = HibernateUtil.getSessionFactory().openSession();
+        
         session.beginTransaction();
-        Criteria cri = session.createCriteria(Object.class)
-                .add(Restrictions.eq("nome", nome));
-        return (Object) cri.uniqueResult();
+        try{
+        if (obj instanceof ContaPoupanca) {
+            Criteria cri = session.createCriteria(ContaPoupanca.class)
+                    .add(Restrictions.eq("numero", numero));
+            cri.add(Restrictions.eq("agencia", agencia));
+            //session.close();
+            return (Object) cri.uniqueResult();
+        } else if(obj instanceof ContaCorrenteComum) {
+            Criteria cri = session.createCriteria(ContaCorrenteComum.class)
+                    .add(Restrictions.eq("numero", numero));
+            cri.add(Restrictions.eq("agencia", agencia));
+            //session.close();
+            return (Object) cri.uniqueResult();
+        } else if(obj instanceof ContaCorrenteLimitada) {
+            Criteria cri = session.createCriteria(ContaCorrenteLimitada.class)
+                    .add(Restrictions.eq("numero", numero))
+                    .add(Restrictions.eq("agencia", agencia));
+            //session.close();
+            return (Object) cri.uniqueResult();
+        }
+        }catch(TransactionException  e) {
+            return null;
+        }catch(AbstractMethodError e) {
+            return null;
+        }catch(HibernateException e) {
+            return null;
+        }
+        return null;
     }
     
+    public ContaPoupanca procuraCp(String numero) {
+        Criteria cri = session.createCriteria(ContaPoupanca.class)
+                    .add(Restrictions.eq("numero", numero));
+            //session.close();
+            return (ContaPoupanca) cri.uniqueResult();
+    }
+
     public Object procuraLogin(String nome) {
         session.beginTransaction();
         Criteria cri = session.createCriteria(Object.class)

@@ -14,6 +14,7 @@ import Classes.Deposito;
 import Classes.Endereco;
 import Classes.Extrato;
 import Hibernate.ClasseDAO;
+import java.io.IOException;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -770,6 +771,11 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
         jLabel5.setText("Numero da Conta");
 
         varNumeroConta.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
+        varNumeroConta.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                varNumeroContaFocusLost(evt);
+            }
+        });
 
         jLabel6.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
         jLabel6.setText("Senha");
@@ -1163,13 +1169,10 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel11, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel10Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel10Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(btnCc))
-                    .addGroup(jPanel10Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(btnCl)))
+                    .addComponent(btnCc)
+                    .addComponent(btnCl))
                 .addContainerGap(641, Short.MAX_VALUE))
         );
         jPanel10Layout.setVerticalGroup(
@@ -1317,16 +1320,11 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel12Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel12Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(btnPoupanca3))
-                    .addGroup(jPanel12Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(btnCorrenteComum3))
-                    .addGroup(jPanel12Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(btnCorrenteLimitada3)))
+                    .addComponent(btnPoupanca3)
+                    .addComponent(btnCorrenteComum3)
+                    .addComponent(btnCorrenteLimitada3))
                 .addContainerGap(641, Short.MAX_VALUE))
         );
         jPanel12Layout.setVerticalGroup(
@@ -1573,8 +1571,10 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
     private void btnCriarNovoClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCriarNovoClienteActionPerformed
         /*String numero, String agencia, double saldo, String tipo,
         String senha, String email*/
+        Object tipoConta;
         if (!verifica()) {
             if (varTipo.getSelectedItem().toString().equals("Poupança")) {
+                tipoConta = new ContaPoupanca();
                 Calendar ca = Calendar.getInstance();
                 String data;
                 int dia, mes, ano;
@@ -1599,15 +1599,15 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
                         varTipo.getSelectedItem().toString(), varSenha.getText(),
                         varEmail.getText(), converteDouble(varRendaMensal.getText()),
                         verificaAtivo(varAtivo.getSelectedItem().toString()), cli);
+                ///if (dao.procuraConta(tipoConta, varNumConta.getText(), varAgencia.getText()) == null) {
                 dao.cadastrar(c1);
-                /*if (c.criaPasta(varNumeroConta.getText(), c1) == true) {
-                    JOptionPane.showMessageDialog(this, "Conta Criada com Sucesso!!\n"
-                            + "Acesse novamente a página para visualizar");
-                    limpar();
-                } else {
-                    JOptionPane.showMessageDialog(null, "A Conta Já existe!!");
-                }*/
+                JOptionPane.showMessageDialog(null, "Conta Aberta Com Sucesso!!");
+                limpar();
+                //} else {
+                //  JOptionPane.showMessageDialog(null, "Houve um problema ao criar a Conta, Contate o Suporte!!", "", ERROR_MESSAGE);
+                //}
             } else if (varTipo.getSelectedItem().toString().equals("Corrente Comum")) {
+                tipoConta = new ContaCorrenteComum();
 
                 Endereco end = new Endereco(varRua.getText(), varNumero.getText(), varComplemento.getText(),
                         varBairro.getText(), varCidade.getText(), varEstado.getText(), varPais.getText(),
@@ -1625,15 +1625,12 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
                         varEmail.getText(), converteDouble(varRendaMensal.getText()),
                         verificaAtivo(varAtivo.getSelectedItem().toString()), cli);
 
-                if (c.criaPasta(varNumeroConta.getText(), c2) == true) {
-                    JOptionPane.showMessageDialog(this, "Conta Criada com Sucesso!!\n"
-                            + "Acesse novamente a página para visualizar");
-                    limpar();
-                } else {
-                    JOptionPane.showMessageDialog(null, "A Conta Já existe!!");
-                }
-            } else if (varTipo.getSelectedItem().toString().equals("Corrente Limitada")) {
+                dao.cadastrar(c2);
+                JOptionPane.showMessageDialog(null, "Conta Aberta Com Sucesso!!");
+                limpar();
 
+            } else if (varTipo.getSelectedItem().toString().equals("Corrente Limitada")) {
+                tipoConta = new ContaCorrenteLimitada();
                 Endereco end = new Endereco(varRua.getText(), varNumero.getText(), varComplemento.getText(),
                         varBairro.getText(), varCidade.getText(), varEstado.getText(), varPais.getText(),
                         varCep.getText());
@@ -1649,17 +1646,10 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
                         varTipo.getSelectedItem().toString(), varSenha.getText(),
                         varEmail.getText(), converteDouble(varRendaMensal.getText()),
                         verificaAtivo(varAtivo.getSelectedItem().toString()), cli);
-
-                if (c.criaPasta(varNumeroConta.getText(), c3) == true) {
-                    JOptionPane.showMessageDialog(this, "Conta Criada com Sucesso!!\n"
-                            + "Acesse novamente a página para visualizar");
-                    limpar();
-                } else {
-                    JOptionPane.showMessageDialog(null, "A Conta Já existe!!");
-                }
-
+                dao.cadastrar(c3);
+                JOptionPane.showMessageDialog(null, "Conta Aberta Com Sucesso!!");
+                limpar();
             }
-
         } else {
             JOptionPane.showMessageDialog(null, "Há Campos em Branco, tente novamente!", "", ERROR_MESSAGE);
         }
@@ -1901,6 +1891,12 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
     private void varDtaFimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_varDtaFimActionPerformed
         requestFocus();        // TODO add your handling code here:
     }//GEN-LAST:event_varDtaFimActionPerformed
+
+    private void varNumeroContaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_varNumeroContaFocusLost
+        /*if(dao.procuraConta(varNumeroConta.getText(), varAgencia.getText())!= null) {
+            JOptionPane.showMessageDialog(null, "Já Existe uma Conta com estes Dados!", "", ERROR_MESSAGE);
+        }*/
+    }//GEN-LAST:event_varNumeroContaFocusLost
 
     /**
      * @param args the command line arguments
