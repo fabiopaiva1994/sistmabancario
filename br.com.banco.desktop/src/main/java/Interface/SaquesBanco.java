@@ -11,7 +11,7 @@ import Classes.ContaCorrenteComum;
 import Classes.ContaCorrenteLimitada;
 import Classes.ContaPoupanca;
 import Classes.Deposito;
-import Classes.Extrato;
+import Classes.Transacao;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 
@@ -21,7 +21,7 @@ import static javax.swing.JOptionPane.ERROR_MESSAGE;
  */
 public class SaquesBanco extends javax.swing.JFrame {
 
-    Extrato ex = new Extrato();
+    Transacao ex = new Transacao();
 
     Object cliente = new Object();
     String t = "";
@@ -331,7 +331,7 @@ public class SaquesBanco extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSacar700ActionPerformed
 
     private void bntExtratoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntExtratoActionPerformed
-        Extrato ex = new Extrato();
+        Transacao ex = new Transacao();
         if (cliente instanceof ContaPoupanca) {
             ContaPoupanca cp = new ContaPoupanca();
             cp = (ContaPoupanca) cliente;
@@ -379,7 +379,7 @@ public class SaquesBanco extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSacarOutroActionPerformed
 
     private void btnExPeriodoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExPeriodoActionPerformed
-        Extrato ex = new Extrato();
+        Transacao ex = new Transacao();
         String dtaInicio;
         String dtaFim;
         dtaInicio = JOptionPane.showInputDialog("Digite a Data Inicial do Periodo \nEx: 10/10/2010");

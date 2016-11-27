@@ -21,7 +21,7 @@ public class HibernateUtil {
             cfg.addAnnotatedClass(Conta.class);
             cfg.addAnnotatedClass(Deposito.class);
             cfg.addAnnotatedClass(Endereco.class);
-            cfg.addAnnotatedClass(Extrato.class);
+            cfg.addAnnotatedClass(Transacao.class);
             cfg.addAnnotatedClass(Pessoa.class);
             
             StandardServiceRegistryBuilder sb = new StandardServiceRegistryBuilder();

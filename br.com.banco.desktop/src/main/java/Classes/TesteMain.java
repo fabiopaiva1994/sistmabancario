@@ -6,11 +6,12 @@
 package Classes;
 
 import javax.swing.JOptionPane;
-import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import Hibernate.*;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
-import org.hibernate.TransactionException;
+import java.util.List;
 
 /**
  *
@@ -19,28 +20,36 @@ import org.hibernate.TransactionException;
 public class TesteMain {
 
     public static void main(String[] args) {
-        Session sessao = null;
-        sessao = HibernateUtil.getSessionFactory().openSession();
-        Extrato ex = new Extrato();
+        //Session sessao = null;
+        //sessao = HibernateUtil.getSessionFactory().openSession();
+        Transacao ex = new Transacao();
         ContaCorrenteComum ccc = new ContaCorrenteComum();
         Date date = ex.converteData("23/02/1994");
         Endereco endereco = new Endereco("rua", "50", "complemento", "bairro", "cidade", "estado", "pais", "cep");
+        List<Transacao> tr = null;
 
         Cliente cli = new Cliente("Fabio", "", "", "lefone", date, 20, endereco);
-        ContaPoupanca cp = new ContaPoupanca(date, "153", "001", 50, "Poupança", "123", "email", 500, true, cli);
+        ContaPoupanca cp = new ContaPoupanca(date, "159159", "001", 50, "Poupança", "123", "email", 500, true, cli, tr);
         ClasseDAO cd = new ClasseDAO();
-        try {
-            if ((ContaPoupanca)cd.procuraConta(cp, "153", "001") == null) {
-                cd.cadastrar(cp);
-            }
+        /*try {
+            if(ContaPoupanca)cd.procuraConta(cp, "153", "001") == null) {*/
+        cd.cadastrar(cp);
+        /*}
         } catch (TransactionException e) {
 
-        }
-        //cp = (ContaPoupanca) cd.procuraConta(cp,"159150","001");
-        JOptionPane.showMessageDialog(null, cp.toString());
+        }*/
+        //cp = cd.procuraCp("159159");
+        //cp.deposita("159159", "001", 5000, "96021424");
+        cp = (ContaPoupanca) cd.procuraConta(cp, "159159", "001");
 
-        JOptionPane.showMessageDialog(null, "Conectou");
-        sessao.close();
-        System.exit(1);
-    }
+        cp.deposita("159159", "001", 5000.50, "96021424");
+        cp = (ContaPoupanca) cd.procuraCp("159159");
+        JOptionPane.showMessageDialog(null, cp.toString());
+        ArrayList<Transacao> tt = new ArrayList<Transacao>();
+        //tt = cd.buscaExtrato("159159");
+        
+            JOptionPane.showMessageDialog(null, "Conectou" + tt.toString());
+            //sessao.close();
+            System.exit(1);
+        }
 }

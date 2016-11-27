@@ -92,19 +92,19 @@ public class Deposito implements Serializable{
         ContaCorrenteLimitada c2 = new ContaCorrenteLimitada();
         ContaPoupanca c3 = new ContaPoupanca();
         if (conta instanceof ContaCorrenteComum) {
-            c1 = c1.Leitura(deposito.getNumeroConta());
+            //c1 = c1.Leitura(deposito.getNumeroConta());
             if (c1.getAgencia().trim().equals(deposito.getNumeroAgencia())) {
                 c1.setSaldo(c1.getSaldo() + getValor());
                 salva(c1.getNumero(), c1);
             }
         } else if (conta instanceof ContaCorrenteLimitada) {
-            c2 = c2.Leitura(deposito.getNumeroConta());
+          //  c2 = c2.Leitura(deposito.getNumeroConta());
             if (c2.getAgencia().trim().equals(deposito.getNumeroAgencia())) {
                 c2.setSaldo(c2.getSaldo() + this.valor);
                 salva(c2.getNumero(), c2);
             }
         } else if (conta instanceof ContaPoupanca) {
-            c3 = c3.Leitura(deposito.getNumeroConta());
+            //c3 = c3.Leitura(deposito.getNumeroConta());
             if (c3.getAgencia().trim().equals(deposito.getNumeroAgencia())) {
                 c3.setSaldo(c3.getSaldo() + this.valor);
                 salva(c3.getNumero(), c3);

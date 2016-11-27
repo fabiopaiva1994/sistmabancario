@@ -5,15 +5,11 @@
  */
 package Interface;
 
-import Classes.Cliente;
-import Classes.Conta;
 import Classes.ContaCorrenteComum;
 import Classes.ContaCorrenteLimitada;
 import Classes.ContaPoupanca;
-import Classes.Deposito;
-import Classes.Extrato;
-import java.io.FileNotFoundException;
-import static java.lang.System.exit;
+import Classes.Transacao;
+import Hibernate.ClasseDAO;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 
@@ -22,8 +18,9 @@ import static javax.swing.JOptionPane.ERROR_MESSAGE;
  * @author fabio
  */
 public class TelaDeposito extends javax.swing.JFrame {
-    Extrato ex = new Extrato();
-    
+
+    Transacao ex = new Transacao();
+
     public void foco() {
         if (varAgencia.isEnabled()) {
             varAgencia.requestFocus();
@@ -31,7 +28,7 @@ public class TelaDeposito extends javax.swing.JFrame {
             varConta.requestFocus();
         } else if (varValor.isEnabled()) {
             varValor.requestFocus();
-        } else if(varTelefone.isEnabled()) {
+        } else if (varTelefone.isEnabled()) {
             varTelefone.requestFocus();
         }
     }
@@ -45,16 +42,16 @@ public class TelaDeposito extends javax.swing.JFrame {
             varConta.setEnabled(true);
             varValor.setEnabled(false);
             foco();
-        }else if(!varAgencia.isEnabled() && !varConta.isEnabled() && !varValor.isEnabled() && varTelefone.isEnabled()) {
+        } else if (!varAgencia.isEnabled() && !varConta.isEnabled() && !varValor.isEnabled() && varTelefone.isEnabled()) {
             varValor.setEnabled(true);
             varTelefone.setEnabled(false);
             foco();
-        }else if(!varAgencia.isEnabled() && !varConta.isEnabled() && !varValor.isEnabled() && varTelefone.isEnabled()) {
+        } else if (!varAgencia.isEnabled() && !varConta.isEnabled() && !varValor.isEnabled() && varTelefone.isEnabled()) {
             varTelefone.setEnabled(false);
             varValor.setEnabled(true);
             varConta.setEnabled(false);
             varAgencia.setEnabled(false);
-        
+
         }
     }
 
@@ -65,10 +62,10 @@ public class TelaDeposito extends javax.swing.JFrame {
         } else if (varConta.isEnabled() == true) {
             varConta.setText("");
             varConta.requestFocus();
-        }else if(varValor.isEnabled() == true) {
+        } else if (varValor.isEnabled() == true) {
             varValor.setText("");
             varValor.requestFocus();
-        }else if(varTelefone.isEnabled() == true) {
+        } else if (varTelefone.isEnabled() == true) {
             varTelefone.setText("");
             varTelefone.requestFocus();
         }
@@ -319,7 +316,7 @@ public class TelaDeposito extends javax.swing.JFrame {
             varConta.requestFocus();
             varTelefone.setEnabled(false);
             varValor.setEnabled(false);
-           
+
         } else if (varConta.isEnabled() == true && !varConta.getText().isEmpty()) {
             varConta.setEnabled(false);
             varValor.setEnabled(true);
@@ -335,25 +332,24 @@ public class TelaDeposito extends javax.swing.JFrame {
             varAgencia.setEnabled(false);
             varConta.setEnabled(false);
             varValor.setEnabled(false);
-            
-            
 
             if (btnPoupanca.isSelected()) {
-                Deposito dep;
+                //Deposito dep;
                 String txt;
                 //Conta.visualizarArquivos(varConta.getText());
                 double vl = Double.valueOf(varValor.getText());
                 ContaPoupanca cp = new ContaPoupanca();
-                cp = ContaPoupanca.Leitura(varConta.getText());
+                //cp = ContaPoupanca.Leitura(varConta.getText());
+                ClasseDAO cd = new ClasseDAO();
+                cp = cd.procuraCp(varConta.getText());
                 if (cp.getTipo().equalsIgnoreCase("poupança")) {
-                    Conta.visualizarArquivos(varConta.getText());
+
                     int opt = JOptionPane.showConfirmDialog(null, cp.getCli().getNome() + "\n"
                             + varValor.getText(), null, WIDTH);
                     if (opt == JOptionPane.YES_OPTION) {
-                        dep = new Deposito(varConta.getText(), varAgencia.getText(), vl, varTelefone.getText());
-                        dep.deposita(dep, cp);
-                        txt = "Valor depositado: " + varValor.getText() + "\nTelefone para Contato: " + varTelefone.getText() + "\n";
-                        ex.gravaLog(varConta.getText(), txt);
+
+                        //txt = "Valor depositado: " + varValor.getText() + "\nTelefone para Contato: " + varTelefone.getText() + "\n";
+                        cp.deposita(varConta.getText(), varAgencia.getText(), vl, varTelefone.getText());
                         this.dispose();
                         new TelaCaixa().setVisible(true);
                     } else if (opt == JOptionPane.NO_OPTION) {
@@ -361,45 +357,36 @@ public class TelaDeposito extends javax.swing.JFrame {
                     }
                 }
             } else if (btnCorrenteComum.isSelected()) {
-                String txt;
-                Deposito dep;
                 double vl = Double.valueOf(varValor.getText());
                 ContaCorrenteComum ccc = new ContaCorrenteComum();
-                ccc = ContaCorrenteComum.Leitura(varConta.getText());
+                ClasseDAO cd = new ClasseDAO();
+                ccc = (ContaCorrenteComum)cd.procuraConta(ccc, varConta.getText(), varAgencia.getText());
                 if (ccc.getTipo().equalsIgnoreCase("Corrente Comum")) {
                     int opt = JOptionPane.showConfirmDialog(null, ccc.getCli().getNome() + "\n"
                             + varValor.getText(), null, WIDTH);
                     if (opt == JOptionPane.YES_OPTION) {
-                        dep = new Deposito(varConta.getText(), varAgencia.getText(), vl, varTelefone.getText());
-                        dep.deposita(dep, ccc);
-                        txt = "Valor depositado: " + varValor.getText() + "\nTelefone para Contato: " + varTelefone.getText() + "\n";
-                        ex.gravaLog(varConta.getText(), txt);
+                        ccc.deposita(varConta.getText(), varAgencia.getText(), vl, varTelefone.getText());
                         this.dispose();
                         new TelaCaixa().setVisible(true);
                     }
                 }
             } else if (btnCorrenteLimitada.isSelected()) {
-              
-                String txt = "";
-                Deposito dep;
                 double vl = Double.valueOf(varValor.getText());
+                ClasseDAO cd = new ClasseDAO();
                 ContaCorrenteLimitada ccl = new ContaCorrenteLimitada();
-                ccl = ContaCorrenteLimitada.Leitura(varConta.getText());
+                ccl = (ContaCorrenteLimitada) cd.procuraConta(ccl,varConta.getText(), varAgencia.getText());
                 if (ccl.getTipo().equalsIgnoreCase("Corrente Limitada")) {
                     int opt = JOptionPane.showConfirmDialog(null, ccl.getCli().getNome() + "\n"
                             + varValor.getText(), null, WIDTH);
                     if (opt == JOptionPane.YES_OPTION) {
-                        dep = new Deposito(varConta.getText(), varAgencia.getText(), vl, varTelefone.getText());
-                        dep.deposita(dep, ccl);
-                        txt = "Valor depositado: " + varValor.getText() + "\nTelefone para Contato: " + varTelefone.getText() + "\n";
-                        ex.gravaLog(varConta.getText(), txt);
+                        ccl.deposita(varConta.getText(), varAgencia.getText(), vl, varTelefone.getText());
                         this.dispose();
                         new TelaCaixa().setVisible(true);
                     }
                 }
-                
-            }else{
-                JOptionPane.showMessageDialog(null,"Selecione um Tipo de Conta!!!", "", ERROR_MESSAGE);
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Selecione um Tipo de Conta!!!", "", ERROR_MESSAGE);
             }
         }
     }//GEN-LAST:event_btnConfirmaActionPerformed
@@ -422,7 +409,7 @@ public class TelaDeposito extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCorrenteComumActionPerformed
 
     private void varAgenciaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_varAgenciaKeyTyped
-        if(varAgencia.getText().length() == 3) {
+        if (varAgencia.getText().length() == 3) {
             btnConfirma.doClick();
         }
     }//GEN-LAST:event_varAgenciaKeyTyped

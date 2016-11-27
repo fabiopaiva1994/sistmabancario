@@ -12,9 +12,8 @@ import Classes.ContaCorrenteLimitada;
 import Classes.ContaPoupanca;
 import Classes.Deposito;
 import Classes.Endereco;
-import Classes.Extrato;
+import Classes.Transacao;
 import Hibernate.ClasseDAO;
-import java.io.IOException;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -35,7 +34,7 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
 
     ClasseDAO dao = new ClasseDAO();
 
-    Extrato extrato = new Extrato();
+    Transacao extrato = new Transacao();
 
     public void limpaAtivo() {
         varAtivo2.setSelectedItem("Ativo");
@@ -1523,10 +1522,10 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
     }//GEN-LAST:event_varBuscarActionPerformed
 
     private void btnOkBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkBuscarActionPerformed
-        if (!varBuscar.getText().isEmpty()) {
+        /*if (!varBuscar.getText().isEmpty()) {
             varTipo.setEnabled(false);
             if (btnCorrenteComum.isSelected()) {
-                ContaCorrenteComum ccc = ContaCorrenteComum.Leitura(varBuscar.getText());
+                //ContaCorrenteComum ccc = ContaCorrenteComum.Leitura(varBuscar.getText());
                 if (ccc.getTipo().equals("Corrente Comum")) {
                     JOptionPane.showMessageDialog(null, ccc.toString(), "", ERROR_MESSAGE);
                     preenche(ccc);
@@ -1537,7 +1536,7 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
                     varSaldo.setEnabled(false);
                 }
             } else if (btnCorrenteLimitada.isSelected()) {
-                ContaCorrenteLimitada ccl = ContaCorrenteLimitada.Leitura(varBuscar.getText());
+                //ContaCorrenteLimitada ccl = ContaCorrenteLimitada.Leitura(varBuscar.getText());
                 if (ccl.getTipo().equals("Corrente Limitada")) {
                     JOptionPane.showMessageDialog(null, ccl.toString(), "", ERROR_MESSAGE);
                     preenche(ccl);
@@ -1548,7 +1547,7 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
                     varSaldo.setEnabled(false);
                 }
             } else if (btnPoupanca.isSelected()) {
-                ContaPoupanca cp = ContaPoupanca.Leitura(varBuscar.getText());
+                //ContaPoupanca cp = ContaPoupanca.Leitura(varBuscar.getText());
                 if (cp.getTipo().equals("Poupança")) {
                     JOptionPane.showMessageDialog(null, cp.toString(), "", ERROR_MESSAGE);
                     preenche(cp);
@@ -1565,7 +1564,7 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
             JOptionPane.showMessageDialog(null, "Digite o numero da conta!", "", ERROR_MESSAGE);
         }
 
-        //Conta.visualizarArquivos(varBuscar.getText());
+        //Conta.visualizarArquivos(varBuscar.getText());*/
     }//GEN-LAST:event_btnOkBuscarActionPerformed
 
     private void btnCriarNovoClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCriarNovoClienteActionPerformed
@@ -1589,7 +1588,7 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
 
                 /*Conta conta, String senha, String nome, String rg, String cpf, String telefone,
                 Endereco endereco, int id*/
-                Extrato ex = new Extrato();
+                Transacao ex = new Transacao();
                 Cliente cli = new Cliente(varNome.getText(), varRg.getText(), varCpf.getText(),
                         varTelefone.getText(), ex.converteData(varDataNascimento.getText()),
                         converteInt(varIdade.getValue().toString()), end);
@@ -1697,7 +1696,7 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
     }//GEN-LAST:event_varNumeroConta2ActionPerformed
 
     private void btnSalvar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvar2ActionPerformed
-        Extrato et = new Extrato();
+        /*Transacao et = new Transacao();
         Deposito dp = new Deposito();
         if (btnCc.isSelected()) {
             ContaCorrenteComum ccc = new ContaCorrenteComum();
@@ -1727,7 +1726,7 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
             et.gravaLog(ccc.getNumero(), d);
         } else {
             JOptionPane.showMessageDialog(null, "Selecione um tipo de Conta Por Favor!", "", ERROR_MESSAGE);
-        }
+        }*/
     }//GEN-LAST:event_btnSalvar2ActionPerformed
 
     private void varNumeroConta3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_varNumeroConta3ActionPerformed
@@ -1735,7 +1734,7 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
     }//GEN-LAST:event_varNumeroConta3ActionPerformed
 
     private void varBuscar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_varBuscar2ActionPerformed
-        if (btnCc.isSelected()) {
+        /*if (btnCc.isSelected()) {
             ContaCorrenteComum ccc = ContaCorrenteComum.Leitura(varNumeroConta2.getText());
             if (ccc != null && ccc.getTipo().equals("Corrente Comum")) {
                 JOptionPane.showMessageDialog(null, ccc.toString(), "", ERROR_MESSAGE);
@@ -1751,11 +1750,11 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
             }
         } else {
             JOptionPane.showMessageDialog(null, "Selecione um tipo de Conta!", "", ERROR_MESSAGE);
-        }
+        }*/
     }//GEN-LAST:event_varBuscar2ActionPerformed
 
     private void btnBuscar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscar2ActionPerformed
-        if (btnPoupanca3.isSelected()) {
+        /*if (btnPoupanca3.isSelected()) {
             ContaPoupanca cp = new ContaPoupanca();
             cp = ContaPoupanca.Leitura(varNumeroConta3.getText());
             if (cp != null && cp.getTipo().equals("Poupança")) {
@@ -1800,7 +1799,7 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
 
         } else {
             JOptionPane.showMessageDialog(null, "Escolha um Tipo de Conta!", "", ERROR_MESSAGE);
-        }
+        }*/
     }//GEN-LAST:event_btnBuscar2ActionPerformed
 
     private void btnSalvar3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvar3ActionPerformed
@@ -1869,7 +1868,7 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
     }//GEN-LAST:event_varDtaFimFocusLost
 
     private void btnOk4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOk4ActionPerformed
-        Extrato ex = new Extrato();
+        /*Transacao ex = new Transacao();
         try {
             varDados.setText(ex.extratoPeriodo(varNumConta.getText(), varDataInicio.getText(), varDtaFim.getText()));
             varNumConta.setText("");
@@ -1877,7 +1876,7 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
             varDtaFim.setText("");
         } catch (NullPointerException e) {
             JOptionPane.showMessageDialog(null, "Nenhuma Conta Encontrada ou não há extrato!");
-        }
+        }*/
     }//GEN-LAST:event_btnOk4ActionPerformed
 
     private void varLimpar4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_varLimpar4ActionPerformed

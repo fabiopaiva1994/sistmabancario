@@ -22,9 +22,9 @@ public class GeraTabelas {
         conf.addAnnotatedClass(ContaCorrenteComum.class);
         conf.addAnnotatedClass(ContaCorrenteLimitada.class);
         conf.addAnnotatedClass(ContaPoupanca.class);
-        conf.addAnnotatedClass(Deposito.class);
+        //conf.addAnnotatedClass(Deposito.class);
         conf.addAnnotatedClass(Endereco.class);
-        conf.addAnnotatedClass(Extrato.class);
+        conf.addAnnotatedClass(Transacao.class);
         
         SchemaExport se = new SchemaExport(conf);
         se.create(true, true);
@@ -40,11 +40,11 @@ public class GeraTabelas {
         cfg.addAnnotatedClass(ContaCorrenteComum.class);
         cfg.addAnnotatedClass(ContaCorrenteLimitada.class);
         cfg.addAnnotatedClass(ContaPoupanca.class);
-        cfg.addAnnotatedClass(Extrato.class);
+        cfg.addAnnotatedClass(Transacao.class);
         cfg.addAnnotatedClass(Pessoa.class);
         cfg.addAnnotatedClass(Deposito.class);
         cfg.addAnnotatedClass(Endereco.class);
-        cfg.addAnnotatedClass(Extrato.class);
+        cfg.addAnnotatedClass(Transacao.class);
         
         
         /*cfg.addAnnotatedClass(Mensalidade.class);
