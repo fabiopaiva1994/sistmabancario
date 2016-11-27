@@ -29,27 +29,41 @@ public class TesteMain {
         List<Transacao> tr = null;
 
         Cliente cli = new Cliente("Fabio", "", "", "lefone", date, 20, endereco);
-        ContaPoupanca cp = new ContaPoupanca(date, "159159", "001", 50, "Poupança", "123", "email", 500, true, cli, tr);
+        ContaPoupanca cp = new ContaPoupanca();//(date, "159159", "001", 50, "Poupança", "123", "email", 500, true, cli, tr);
         ClasseDAO cd = new ClasseDAO();
         /*try {
             if(ContaPoupanca)cd.procuraConta(cp, "153", "001") == null) {*/
-        cd.cadastrar(cp);
+        //cd.cadastrar(cp);
         /*}
         } catch (TransactionException e) {
 
         }*/
         //cp = cd.procuraCp("159159");
         //cp.deposita("159159", "001", 5000, "96021424");
-        cp = (ContaPoupanca) cd.procuraConta(cp, "159159", "001");
-
-        cp.deposita("159159", "001", 5000.50, "96021424");
-        cp = (ContaPoupanca) cd.procuraCp("159159");
-        JOptionPane.showMessageDialog(null, cp.toString());
-        ArrayList<Transacao> tt = new ArrayList<Transacao>();
-        //tt = cd.buscaExtrato("159159");
+        //cp = (ContaPoupanca) cd.procuraConta(cp, "159159", "001");
+        //cp = (ContaPoupanca) cd.procuraCp("159159");
+        //cp.deposita("159159", "001", 213, "96021424");
+        //cp.retirada(cp, 10000);
+        //cp = (ContaPoupanca) cd.procuraCp("159159");
+        ContaCorrenteComum cccp = new ContaCorrenteComum();
+        cccp = (ContaCorrenteComum) cd.procuraConta(cccp, "456456", "001");
+        //JOptionPane.showMessageDialog(null, cp.toString());
         
-            JOptionPane.showMessageDialog(null, "Conectou" + tt.toString());
-            //sessao.close();
-            System.exit(1);
+         ArrayList<Transacao> tt = new ArrayList<>();
+        /*for (int i = 0; i <= cp.getExtrato().size(); i++ ) {           
+            tt.add(cp.getExtrato().get(i));
+            i ++;
         }
+        Transacao tx = new Transacao();
+        int i = 0;
+        String data = "27/11/16";
+        /*while(tt.get(i).getData().after(tx.converteData(data))) {
+            JOptionPane.showMessageDialog(null, tt.get(i));
+            i ++;
+        }*/
+
+        JOptionPane.showMessageDialog(null, cccp.getExtrato());
+        //sessao.close();
+        System.exit(1);
+    }
 }

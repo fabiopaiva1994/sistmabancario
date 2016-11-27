@@ -10,7 +10,10 @@ import Classes.Conta;
 import Classes.ContaCorrenteComum;
 import Classes.ContaCorrenteLimitada;
 import Classes.ContaPoupanca;
+import Hibernate.ClasseDAO;
 import java.awt.event.KeyEvent;
+import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.ERROR_MESSAGE;
 
 /**
  *
@@ -475,6 +478,7 @@ public class TelaSaque extends javax.swing.JFrame {
     }//GEN-LAST:event_btn0ActionPerformed
 
     private void btnConfirmaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmaActionPerformed
+        ClasseDAO cd  = new ClasseDAO();
         if (varAgencia.isEnabled() == true && varAgencia.getText().isEmpty() != true) {
             varAgencia.setEnabled(false);
             varConta.setEnabled(true);
@@ -486,29 +490,38 @@ public class TelaSaque extends javax.swing.JFrame {
         } else if (varSenha.isEnabled() == true && varAgencia.getText().isEmpty() != true) {
             varSenha.setEnabled(false);
             if (btnCorrenteComum.isSelected()) {
-                ContaCorrenteComum c1 = ContaCorrenteComum.Leitura(varConta.getText().trim());
+                ContaCorrenteComum c1 = new ContaCorrenteComum();
+                c1 = (ContaCorrenteComum) cd.procuraConta(c1, varConta.getText(), varAgencia.getText());
                 if (varSenha.getText().equals(c1.getSenha().trim())
-                        && varAgencia.getText().equals(c1.getAgencia().trim())) {
+                        && varAgencia.getText().equals(c1.getAgencia().trim()) && c1.isAtivo() == true) {
 
                     new SaquesBanco(c1).setVisible(true);
                     this.dispose();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Tente novamente, caso o erro persista dirija-se a um atendente!", "", ERROR_MESSAGE);
                 }
 
             } else if (btnCorrenteLimitada.isSelected()) {
-                ContaCorrenteLimitada c2 = ContaCorrenteLimitada.Leitura(varConta.getText().trim());
+                ContaCorrenteLimitada c2 = new ContaCorrenteLimitada();
+                c2 = (ContaCorrenteLimitada) cd.procuraConta(c2, varConta.getText(), varAgencia.getText());
                 if (varSenha.getText().equals(c2.getSenha().trim())
-                        && varAgencia.getText().equals(c2.getAgencia().trim())) {
+                        && varAgencia.getText().equals(c2.getAgencia().trim()) && c2.isAtivo() == true) {
 
                     new SaquesBanco(c2).setVisible(true);
                     this.dispose();
+                }else {
+                    JOptionPane.showMessageDialog(null, "Tente novamente, caso o erro persista dirija-se a um atendente!", "", ERROR_MESSAGE);
                 }
             } else if (btnPoupanca.isSelected()) {
-                ContaPoupanca c3 = ContaPoupanca.Leitura(varConta.getText().trim());
+                ContaPoupanca c3 = new ContaPoupanca();
+                c3 = (ContaPoupanca) cd.procuraConta(c3, varConta.getText(), varAgencia.getText());
                 if (varSenha.getText().equals(c3.getSenha().trim())
-                        && varAgencia.getText().equals(c3.getAgencia().trim())) {
+                        && varAgencia.getText().equals(c3.getAgencia().trim()) && c3.isAtivo() == true) {
 
                     new SaquesBanco(c3).setVisible(true);
                     this.dispose();
+                }else {
+                    JOptionPane.showMessageDialog(null, "Tente novamente, caso o erro persista dirija-se a um atendente!", "", ERROR_MESSAGE);
                 }
             }
         }

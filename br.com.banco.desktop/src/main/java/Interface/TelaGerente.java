@@ -10,7 +10,6 @@ import Classes.Conta;
 import Classes.ContaCorrenteComum;
 import Classes.ContaCorrenteLimitada;
 import Classes.ContaPoupanca;
-import Classes.Deposito;
 import Classes.Endereco;
 import Classes.Transacao;
 import Hibernate.ClasseDAO;
@@ -21,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 
@@ -39,6 +39,7 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
     public void limpaAtivo() {
         varAtivo2.setSelectedItem("Ativo");
         varNumeroConta3.setText("");
+        varAgenciaBloqueioDesbloqueio.setText("");
         btnSalvar3.setEnabled(false);
     }
 
@@ -206,6 +207,7 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
     }
 
     public void limpar() {
+        varBuscar1.setText("");
         varLimite.setText("");
         varAgencia.setText("");
         varBairro.setText("");
@@ -237,7 +239,7 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
     }
 
     public void alteraConta(Object conta) {
-        Deposito dep = new Deposito();
+        ClasseDAO cd = new ClasseDAO();
         if (conta instanceof ContaPoupanca) {
             ContaPoupanca cp = new ContaPoupanca();
             cp = (ContaPoupanca) conta;
@@ -257,13 +259,13 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
             cp.getCli().getEndereco().setBairro(varBairro.getText());
             cp.getCli().getEndereco().setCep(varCep.getText());
             cp.getCli().getEndereco().setCidade(varCidade.getText());
-            cp.getCli().getEndereco().setComplemento(varCidade.getText());
+            cp.getCli().getEndereco().setComplemento(varComplemento.getText());
             cp.getCli().getEndereco().setEstado(varEstado.getText());
             cp.getCli().getEndereco().setNumero(varNumero.getText());
             cp.getCli().getEndereco().setPais(varPais.getText());
             cp.getCli().getEndereco().setRua(varRua.getText());
 
-            dep.alteraConta(cp);
+            cd.atualizar(cp);
 
         } else if (conta instanceof ContaCorrenteComum) {
             ContaCorrenteComum cp = new ContaCorrenteComum();
@@ -291,7 +293,7 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
             cp.getCli().getEndereco().setPais(varPais.getText());
             cp.getCli().getEndereco().setRua(varRua.getText());
 
-            dep.alteraConta(cp);
+            cd.atualizar(cp);
 
         } else if (conta instanceof ContaCorrenteLimitada) {
             ContaCorrenteLimitada cp = new ContaCorrenteLimitada();
@@ -320,7 +322,7 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
             cp.getCli().getEndereco().setRua(varRua.getText());
             cp.setLimite(converteDouble1(varLimite.getText()));
 
-            dep.alteraConta(cp);
+            cd.atualizar(cp);
 
         }
     }
@@ -432,6 +434,7 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
         btnCorrenteComum = new javax.swing.JRadioButton();
         btnCorrenteLimitada = new javax.swing.JRadioButton();
         btnSair = new javax.swing.JButton();
+        varBuscar1 = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
         jPanel10 = new javax.swing.JPanel();
@@ -442,6 +445,8 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
         jLabel27 = new javax.swing.JLabel();
         btnSalvar2 = new javax.swing.JButton();
         varBuscar2 = new javax.swing.JButton();
+        varNumeroConta4 = new javax.swing.JTextField();
+        jLabel29 = new javax.swing.JLabel();
         btnCc = new javax.swing.JRadioButton();
         btnCl = new javax.swing.JRadioButton();
         jPanel3 = new javax.swing.JPanel();
@@ -453,6 +458,8 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
         btnBuscar2 = new javax.swing.JButton();
         jLabel30 = new javax.swing.JLabel();
         jLabel31 = new javax.swing.JLabel();
+        jLabel32 = new javax.swing.JLabel();
+        varAgenciaBloqueioDesbloqueio = new javax.swing.JTextField();
         btnPoupanca3 = new javax.swing.JRadioButton();
         btnCorrenteComum3 = new javax.swing.JRadioButton();
         btnCorrenteLimitada3 = new javax.swing.JRadioButton();
@@ -469,6 +476,11 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
         jScrollPane1 = new javax.swing.JScrollPane();
         varDados = new javax.swing.JTextPane();
         varLimpar4 = new javax.swing.JButton();
+        varAgenciaExtrato = new javax.swing.JTextField();
+        jLabel37 = new javax.swing.JLabel();
+        btnPoupancaExtrato = new javax.swing.JRadioButton();
+        btnCorrenteComumExtrato = new javax.swing.JRadioButton();
+        btnCorrenteLimitadaExtrato = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -939,6 +951,7 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
         });
 
         varBuscar.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
+        varBuscar.setText("Conta");
         varBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 varBuscarActionPerformed(evt);
@@ -988,11 +1001,19 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
             }
         });
 
+        varBuscar1.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
+        varBuscar1.setText("Agencia");
+        varBuscar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                varBuscar1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
         jPanel9Layout.setHorizontalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
+            .addGroup(jPanel9Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel9Layout.createSequentialGroup()
@@ -1008,12 +1029,13 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
                             .addComponent(varBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnCriarNovoCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnSalvarAlteracoes, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(varBuscar1, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
                         .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnOkBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel9Layout.createSequentialGroup()
-                                .addComponent(btnSalvarAlteracoes, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(106, 106, 106)
                 .addComponent(btnSair)
                 .addGap(25, 25, 25))
@@ -1029,9 +1051,10 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
                     .addComponent(btnCorrenteComum)
                     .addComponent(btnCorrenteLimitada))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(varBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnOkBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(varBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(varBuscar1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCriarNovoCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1077,7 +1100,7 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
         varValorExtorno.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
 
         jLabel28.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
-        jLabel28.setText("Valor do Extorno");
+        jLabel28.setText("Valor do Estorno");
 
         varNumeroConta2.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
         varNumeroConta2.addActionListener(new java.awt.event.ActionListener() {
@@ -1110,6 +1133,16 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
             }
         });
 
+        varNumeroConta4.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
+        varNumeroConta4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                varNumeroConta4ActionPerformed(evt);
+            }
+        });
+
+        jLabel29.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
+        jLabel29.setText("Agência");
+
         javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
         jPanel11.setLayout(jPanel11Layout);
         jPanel11Layout.setHorizontalGroup(
@@ -1117,36 +1150,43 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
             .addGroup(jPanel11Layout.createSequentialGroup()
                 .addGap(46, 46, 46)
                 .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel27, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel28, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel11Layout.createSequentialGroup()
-                            .addComponent(varNumeroConta2, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(varBuscar2, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel11Layout.createSequentialGroup()
-                            .addComponent(varValorExtorno, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(104, 104, 104)
-                            .addComponent(btnSalvar2, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(276, Short.MAX_VALUE))
+                    .addGroup(jPanel11Layout.createSequentialGroup()
+                        .addComponent(varValorExtorno, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(104, 104, 104)
+                        .addComponent(btnSalvar2, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel11Layout.createSequentialGroup()
+                        .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel27, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel28, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(varNumeroConta4, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel29, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel11Layout.createSequentialGroup()
+                                .addComponent(varNumeroConta2, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(varBuscar2, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(38, 38, 38))))
         );
         jPanel11Layout.setVerticalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel11Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel27)
+                .addContainerGap(20, Short.MAX_VALUE)
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel27)
+                    .addComponent(jLabel29))
                 .addGap(9, 9, 9)
-                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel11Layout.createSequentialGroup()
-                        .addGap(52, 52, 52)
-                        .addComponent(jLabel28)
-                        .addGap(7, 7, 7)
-                        .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(varValorExtorno, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnSalvar2, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(varNumeroConta2, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(varBuscar2, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(varNumeroConta2, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(varBuscar2, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(varNumeroConta4, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(9, 9, 9)
+                .addComponent(jLabel28)
+                .addGap(7, 7, 7)
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(varValorExtorno, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSalvar2, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -1251,6 +1291,16 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
         jLabel31.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
         jLabel31.setText("Numero da Conta");
 
+        jLabel32.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
+        jLabel32.setText("Agência");
+
+        varAgenciaBloqueioDesbloqueio.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
+        varAgenciaBloqueioDesbloqueio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                varAgenciaBloqueioDesbloqueioActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
         jPanel13.setLayout(jPanel13Layout);
         jPanel13Layout.setHorizontalGroup(
@@ -1258,29 +1308,46 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
             .addGroup(jPanel13Layout.createSequentialGroup()
                 .addGap(32, 32, 32)
                 .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel30, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel13Layout.createSequentialGroup()
+                        .addComponent(jLabel31, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel13Layout.createSequentialGroup()
+                        .addComponent(jLabel30, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
                     .addGroup(jPanel13Layout.createSequentialGroup()
                         .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(varNumeroConta3)
                             .addComponent(varAtivo2, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(44, 44, 44)
                         .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnSalvar3, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnBuscar2, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(350, Short.MAX_VALUE))
-            .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel13Layout.createSequentialGroup()
-                    .addGap(42, 42, 42)
-                    .addComponent(jLabel31, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(589, Short.MAX_VALUE)))
+                            .addGroup(jPanel13Layout.createSequentialGroup()
+                                .addGap(44, 44, 44)
+                                .addComponent(btnSalvar3, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel13Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel13Layout.createSequentialGroup()
+                                        .addComponent(jLabel32, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(97, 97, 97))
+                                    .addComponent(varAgenciaBloqueioDesbloqueio))
+                                .addGap(18, 18, 18)
+                                .addComponent(btnBuscar2, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(70, 70, 70))))))
         );
         jPanel13Layout.setVerticalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel13Layout.createSequentialGroup()
-                .addGap(44, 44, 44)
-                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(varNumeroConta3, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnBuscar2, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(14, 14, 14)
+                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel13Layout.createSequentialGroup()
+                        .addComponent(jLabel31)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(varNumeroConta3, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel13Layout.createSequentialGroup()
+                        .addComponent(jLabel32)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(varAgenciaBloqueioDesbloqueio, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnBuscar2, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel30)
                 .addGap(5, 5, 5)
@@ -1288,11 +1355,6 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
                     .addComponent(btnSalvar3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(varAtivo2, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel13Layout.createSequentialGroup()
-                    .addGap(21, 21, 21)
-                    .addComponent(jLabel31)
-                    .addContainerGap(113, Short.MAX_VALUE)))
         );
 
         btnPoupanca3.setBackground(new java.awt.Color(204, 204, 0));
@@ -1324,7 +1386,7 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
                     .addComponent(btnPoupanca3)
                     .addComponent(btnCorrenteComum3)
                     .addComponent(btnCorrenteLimitada3))
-                .addContainerGap(641, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel12Layout.setVerticalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1441,6 +1503,29 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
             }
         });
 
+        varAgenciaExtrato.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
+
+        jLabel37.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
+        jLabel37.setText("Agência");
+
+        btnPoupancaExtrato.setBackground(new java.awt.Color(204, 204, 0));
+        buttonGroup3.add(btnPoupancaExtrato);
+        btnPoupancaExtrato.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        btnPoupancaExtrato.setForeground(new java.awt.Color(255, 255, 255));
+        btnPoupancaExtrato.setText("Poupança");
+
+        btnCorrenteComumExtrato.setBackground(new java.awt.Color(204, 204, 0));
+        buttonGroup3.add(btnCorrenteComumExtrato);
+        btnCorrenteComumExtrato.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        btnCorrenteComumExtrato.setForeground(new java.awt.Color(255, 255, 255));
+        btnCorrenteComumExtrato.setText("Corrente Comum");
+
+        btnCorrenteLimitadaExtrato.setBackground(new java.awt.Color(204, 204, 0));
+        buttonGroup3.add(btnCorrenteLimitadaExtrato);
+        btnCorrenteLimitadaExtrato.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        btnCorrenteLimitadaExtrato.setForeground(new java.awt.Color(255, 255, 255));
+        btnCorrenteLimitadaExtrato.setText("Corrente Limitada");
+
         javax.swing.GroupLayout jPanel15Layout = new javax.swing.GroupLayout(jPanel15);
         jPanel15.setLayout(jPanel15Layout);
         jPanel15Layout.setHorizontalGroup(
@@ -1448,36 +1533,63 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
             .addGroup(jPanel15Layout.createSequentialGroup()
                 .addGap(54, 54, 54)
                 .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel35)
-                    .addComponent(varNumConta, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(jPanel15Layout.createSequentialGroup()
-                            .addComponent(varLimpar4, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnOk4, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel15Layout.createSequentialGroup()
+                        .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(jPanel15Layout.createSequentialGroup()
+                                .addComponent(varLimpar4, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnOk4, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(varDtaFim, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel36)
+                                .addComponent(jLabel34)
+                                .addComponent(varDataInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
                         .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(varDtaFim, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel36)
-                            .addComponent(jLabel34)
-                            .addComponent(varDataInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(480, Short.MAX_VALUE))
+                            .addComponent(btnPoupancaExtrato)
+                            .addComponent(btnCorrenteComumExtrato)
+                            .addComponent(btnCorrenteLimitadaExtrato)))
+                    .addGroup(jPanel15Layout.createSequentialGroup()
+                        .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel35)
+                            .addComponent(varNumConta, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel37)
+                            .addComponent(varAgenciaExtrato, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(162, Short.MAX_VALUE))
             .addComponent(jPanel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel15Layout.setVerticalGroup(
             jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel15Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel35)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(varNumConta, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel34)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(varDataInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel36)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(varDtaFim, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel15Layout.createSequentialGroup()
+                        .addComponent(jLabel35)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(varNumConta, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel15Layout.createSequentialGroup()
+                        .addComponent(jLabel37)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(varAgenciaExtrato, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel15Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel34)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(varDataInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel36)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(varDtaFim, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel15Layout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addComponent(btnPoupancaExtrato)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnCorrenteComumExtrato)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnCorrenteLimitadaExtrato)))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnOk4, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
@@ -1515,6 +1627,7 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
 
     private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairActionPerformed
         this.dispose();        // TODO add your handling code here:
+        System.exit(1);
     }//GEN-LAST:event_btnSairActionPerformed
 
     private void varBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_varBuscarActionPerformed
@@ -1522,10 +1635,12 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
     }//GEN-LAST:event_varBuscarActionPerformed
 
     private void btnOkBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkBuscarActionPerformed
-        /*if (!varBuscar.getText().isEmpty()) {
+        ClasseDAO cd = new ClasseDAO();
+        if (!varBuscar.getText().isEmpty()) {
             varTipo.setEnabled(false);
             if (btnCorrenteComum.isSelected()) {
-                //ContaCorrenteComum ccc = ContaCorrenteComum.Leitura(varBuscar.getText());
+                ContaCorrenteComum ccc = new ContaCorrenteComum();
+                ccc = (ContaCorrenteComum) cd.procuraConta(ccc, varBuscar.getText(), varBuscar1.getText());
                 if (ccc.getTipo().equals("Corrente Comum")) {
                     JOptionPane.showMessageDialog(null, ccc.toString(), "", ERROR_MESSAGE);
                     preenche(ccc);
@@ -1536,7 +1651,8 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
                     varSaldo.setEnabled(false);
                 }
             } else if (btnCorrenteLimitada.isSelected()) {
-                //ContaCorrenteLimitada ccl = ContaCorrenteLimitada.Leitura(varBuscar.getText());
+                ContaCorrenteLimitada ccl = new ContaCorrenteLimitada();
+                ccl = (ContaCorrenteLimitada) cd.procuraConta(ccl, varBuscar.getText(), varBuscar1.getText());
                 if (ccl.getTipo().equals("Corrente Limitada")) {
                     JOptionPane.showMessageDialog(null, ccl.toString(), "", ERROR_MESSAGE);
                     preenche(ccl);
@@ -1547,7 +1663,8 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
                     varSaldo.setEnabled(false);
                 }
             } else if (btnPoupanca.isSelected()) {
-                //ContaPoupanca cp = ContaPoupanca.Leitura(varBuscar.getText());
+                ContaPoupanca cp = new ContaPoupanca();
+                cp = (ContaPoupanca) cd.procuraConta(cp, varBuscar.getText(), varBuscar1.getText());
                 if (cp.getTipo().equals("Poupança")) {
                     JOptionPane.showMessageDialog(null, cp.toString(), "", ERROR_MESSAGE);
                     preenche(cp);
@@ -1592,12 +1709,12 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
                 Cliente cli = new Cliente(varNome.getText(), varRg.getText(), varCpf.getText(),
                         varTelefone.getText(), ex.converteData(varDataNascimento.getText()),
                         converteInt(varIdade.getValue().toString()), end);
-
+                List<Transacao> tx = null;
                 c1 = new ContaPoupanca(ex.converteData(data), varNumeroConta.getText(), varAgencia.getText(),
                         converteDouble(varSaldo.getText()),
                         varTipo.getSelectedItem().toString(), varSenha.getText(),
                         varEmail.getText(), converteDouble(varRendaMensal.getText()),
-                        verificaAtivo(varAtivo.getSelectedItem().toString()), cli);
+                        verificaAtivo(varAtivo.getSelectedItem().toString()), cli, tx);
                 ///if (dao.procuraConta(tipoConta, varNumConta.getText(), varAgencia.getText()) == null) {
                 dao.cadastrar(c1);
                 JOptionPane.showMessageDialog(null, "Conta Aberta Com Sucesso!!");
@@ -1617,12 +1734,13 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
                 Cliente cli = new Cliente(varNome.getText(), varRg.getText(), varCpf.getText(),
                         varTelefone.getText(), extrato.converteData(varDataNascimento.getText()),
                         converteInt(varIdade.getValue().toString()), end);
+                List<Transacao> tx = null;
 
                 c2 = new ContaCorrenteComum(varNumeroConta.getText(), varAgencia.getText(),
                         converteDouble(varSaldo.getText()),
                         varTipo.getSelectedItem().toString(), varSenha.getText(),
                         varEmail.getText(), converteDouble(varRendaMensal.getText()),
-                        verificaAtivo(varAtivo.getSelectedItem().toString()), cli);
+                        verificaAtivo(varAtivo.getSelectedItem().toString()), cli, tx);
 
                 dao.cadastrar(c2);
                 JOptionPane.showMessageDialog(null, "Conta Aberta Com Sucesso!!");
@@ -1640,11 +1758,12 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
                         varTelefone.getText(), extrato.converteData(varDataNascimento.getText()),
                         converteInt(varIdade.getValue().toString()), end);
                 double limite = Double.valueOf(varLimite.getText());
+                List<Transacao> tx = null;
                 c3 = new ContaCorrenteLimitada(limite, varNumeroConta.getText(), varAgencia.getText(),
                         converteDouble(varSaldo.getText()),
                         varTipo.getSelectedItem().toString(), varSenha.getText(),
                         varEmail.getText(), converteDouble(varRendaMensal.getText()),
-                        verificaAtivo(varAtivo.getSelectedItem().toString()), cli);
+                        verificaAtivo(varAtivo.getSelectedItem().toString()), cli, tx);
                 dao.cadastrar(c3);
                 JOptionPane.showMessageDialog(null, "Conta Aberta Com Sucesso!!");
                 limpar();
@@ -1696,37 +1815,32 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
     }//GEN-LAST:event_varNumeroConta2ActionPerformed
 
     private void btnSalvar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvar2ActionPerformed
-        /*Transacao et = new Transacao();
-        Deposito dp = new Deposito();
+        Transacao et = new Transacao();
+
         if (btnCc.isSelected()) {
             ContaCorrenteComum ccc = new ContaCorrenteComum();
             ccc = (ContaCorrenteComum) ob;
-            dp = new Deposito(ccc.getNumero(), ccc.getAgencia(), converteDouble1(varValorExtorno.getText()),
-                    ccc.getCli().getTelefone());
-            dp.deposita(dp, ccc);
-            String d = "Estorno no Valor de R$" + varValorExtorno.getText() + "\nPropietário da Conta: " + ccc.getCli().getNome()
-                    + "\n";
+            double v = Double.parseDouble(varValorExtorno.getText());
+            ccc.deposita(ccc.getNumero(), ccc.getAgencia(), v, ccc.getCli().getTelefone());
+
             varNumeroConta2.setText("");
             varValorExtorno.setText("");
+            varNumeroConta2.setText("");
             btnSalvar2.setEnabled(false);
-
-            et.gravaLog(ccc.getNumero(), d);
 
         } else if (btnCl.isSelected()) {
             ContaCorrenteLimitada ccc = new ContaCorrenteLimitada();
             ccc = (ContaCorrenteLimitada) ob;
-            dp = new Deposito(ccc.getNumero(), ccc.getAgencia(), converteDouble1(varValorExtorno.getText()),
-                    ccc.getCli().getTelefone());
-            dp.deposita(dp, ccc);
-            String d = "Estorno no Valor de R$" + varValorExtorno.getText() + "\nPropietário da Conta: " + ccc.getCli().getNome()
-                    + "\n";
+            double v = Double.parseDouble(varValorExtorno.getText());
+            ccc.deposita(ccc.getNumero(), ccc.getAgencia(), v, ccc.getCli().getTelefone());
+
             varNumeroConta2.setText("");
             varValorExtorno.setText("");
+            varNumeroConta2.setText("");
             btnSalvar2.setEnabled(false);
-            et.gravaLog(ccc.getNumero(), d);
         } else {
             JOptionPane.showMessageDialog(null, "Selecione um tipo de Conta Por Favor!", "", ERROR_MESSAGE);
-        }*/
+        }
     }//GEN-LAST:event_btnSalvar2ActionPerformed
 
     private void varNumeroConta3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_varNumeroConta3ActionPerformed
@@ -1734,15 +1848,18 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
     }//GEN-LAST:event_varNumeroConta3ActionPerformed
 
     private void varBuscar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_varBuscar2ActionPerformed
-        /*if (btnCc.isSelected()) {
-            ContaCorrenteComum ccc = ContaCorrenteComum.Leitura(varNumeroConta2.getText());
+        ClasseDAO cd = new ClasseDAO();
+        if (btnCc.isSelected()) {
+            ContaCorrenteComum ccc = new ContaCorrenteComum();
+            ccc = (ContaCorrenteComum) cd.procuraConta(ccc, varNumeroConta4.getText(), varNumeroConta2.getText());
             if (ccc != null && ccc.getTipo().equals("Corrente Comum")) {
                 JOptionPane.showMessageDialog(null, ccc.toString(), "", ERROR_MESSAGE);
                 ob = ccc;
                 btnSalvar2.setEnabled(true);
             }
         } else if (btnCl.isSelected()) {
-            ContaCorrenteLimitada ccl = ContaCorrenteLimitada.Leitura(varNumeroConta2.getText());
+            ContaCorrenteLimitada ccl = new ContaCorrenteLimitada();
+            ccl = (ContaCorrenteLimitada) cd.procuraConta(ccl, varNumeroConta4.getText(), varNumeroConta2.getText());
             if (ccl != null && ccl.getTipo().equals("Corrente Limitada")) {
                 JOptionPane.showMessageDialog(null, ccl.toString(), "", ERROR_MESSAGE);
                 ob = ccl;
@@ -1750,13 +1867,14 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
             }
         } else {
             JOptionPane.showMessageDialog(null, "Selecione um tipo de Conta!", "", ERROR_MESSAGE);
-        }*/
+        }
     }//GEN-LAST:event_varBuscar2ActionPerformed
 
     private void btnBuscar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscar2ActionPerformed
-        /*if (btnPoupanca3.isSelected()) {
+        ClasseDAO cd = new ClasseDAO();
+        if (btnPoupanca3.isSelected()) {
             ContaPoupanca cp = new ContaPoupanca();
-            cp = ContaPoupanca.Leitura(varNumeroConta3.getText());
+            cp = cd.procuraCp(varNumeroConta3.getText());
             if (cp != null && cp.getTipo().equals("Poupança")) {
                 JOptionPane.showMessageDialog(null, cp.toString(), "", ERROR_MESSAGE);
                 ob = cp;
@@ -1770,7 +1888,7 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
 
         } else if (btnCorrenteComum3.isSelected()) {
             ContaCorrenteComum ccc = new ContaCorrenteComum();
-            ccc = ContaCorrenteComum.Leitura(varNumeroConta3.getText());
+            ccc = (ContaCorrenteComum) cd.procuraConta(ccc, varNumeroConta3.getText(), varAgenciaBloqueioDesbloqueio.getText());
             if (ccc != null && ccc.getTipo().equals("Corrente Comum")) {
                 JOptionPane.showMessageDialog(null, ccc.toString(), "", ERROR_MESSAGE);
                 ob = ccc;
@@ -1785,7 +1903,7 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
 
         } else if (btnCorrenteLimitada3.isSelected()) {
             ContaCorrenteLimitada ccl = new ContaCorrenteLimitada();
-            ccl = ContaCorrenteLimitada.Leitura(varNumeroConta3.getText());
+            ccl = (ContaCorrenteLimitada) cd.procuraConta(ccl, varNumeroConta3.getText(), varAgenciaBloqueioDesbloqueio.getText());
             if (ccl != null && ccl.getTipo().equals("Corrente Limitada")) {
                 JOptionPane.showMessageDialog(null, ccl.toString(), "", ERROR_MESSAGE);
                 ob = ccl;
@@ -1799,28 +1917,28 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
 
         } else {
             JOptionPane.showMessageDialog(null, "Escolha um Tipo de Conta!", "", ERROR_MESSAGE);
-        }*/
+        }
     }//GEN-LAST:event_btnBuscar2ActionPerformed
 
     private void btnSalvar3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvar3ActionPerformed
-        Deposito dp = new Deposito();
+        ClasseDAO cd = new ClasseDAO();
         if (ob instanceof ContaPoupanca) {
             ContaPoupanca cp = new ContaPoupanca();
             cp = (ContaPoupanca) ob;
             cp.setAtivo(verificaAtivo(varAtivo2.getSelectedItem().toString()));
-            dp.alteraConta(cp);
+            cd.atualizar(cp);
             limpaAtivo();
         } else if (ob instanceof ContaCorrenteComum) {
             ContaCorrenteComum ccc = new ContaCorrenteComum();
             ccc = (ContaCorrenteComum) ob;
             ccc.setAtivo(verificaAtivo(varAtivo2.getSelectedItem().toString()));
-            dp.alteraConta(ccc);
+            cd.atualizar(ccc);
             limpaAtivo();
         } else if (ob instanceof ContaCorrenteLimitada) {
             ContaCorrenteLimitada ccl = new ContaCorrenteLimitada();
             ccl = (ContaCorrenteLimitada) ob;
             ccl.setAtivo(verificaAtivo(varAtivo2.getSelectedItem().toString()));
-            dp.alteraConta(ccl);
+            cd.atualizar(ccl);
             limpaAtivo();
         } else {
             JOptionPane.showMessageDialog(null, "Escolha um tipo de Conta!", "", ERROR_MESSAGE);
@@ -1868,15 +1986,57 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
     }//GEN-LAST:event_varDtaFimFocusLost
 
     private void btnOk4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOk4ActionPerformed
-        /*Transacao ex = new Transacao();
-        try {
-            varDados.setText(ex.extratoPeriodo(varNumConta.getText(), varDataInicio.getText(), varDtaFim.getText()));
+        Transacao ex = new Transacao();
+        ClasseDAO cd = new ClasseDAO();
+        if (btnCorrenteComumExtrato.isSelected()) {
+            ContaCorrenteComum ccc = new ContaCorrenteComum();
+            ccc = (ContaCorrenteComum) cd.procuraConta(ccc, varNumConta.getText(), varAgenciaExtrato.getText());
+            if (ex.converteData(varDataInicio.getText()) != null && ex.converteData(varDtaFim.getText()) != null) {
+
+                varDados.setText(ex.imprimeExtratoPeriodo(ccc, ex.converteData(varDataInicio.getText()),
+                        ex.converteData(varDtaFim.getText())));
+                
+            } else {
+                varDados.setText("" + ccc.getExtrato());
+            }
             varNumConta.setText("");
             varDataInicio.setText("");
             varDtaFim.setText("");
-        } catch (NullPointerException e) {
-            JOptionPane.showMessageDialog(null, "Nenhuma Conta Encontrada ou não há extrato!");
-        }*/
+            varAgenciaExtrato.setText("");
+        } else if (btnPoupancaExtrato.isSelected()) {
+            ContaPoupanca cp = new ContaPoupanca();
+            cp = (ContaPoupanca) cd.procuraConta(cp, varNumConta.getText(), varAgenciaExtrato.getText());
+            if (ex.converteData(varDataInicio.getText()) != null && ex.converteData(varDtaFim.getText()) != null) {
+
+                varDados.setText(ex.imprimeExtratoPeriodo(cp, ex.converteData(varDataInicio.getText()),
+                        ex.converteData(varDtaFim.getText())));
+                
+            } else {
+                varDados.setText("" + cp.getExtrato());
+            }
+            varNumConta.setText("");
+            varDataInicio.setText("");
+            varDtaFim.setText("");
+            varAgenciaExtrato.setText("");
+        } else if (btnCorrenteLimitadaExtrato.isSelected()) {
+            ContaCorrenteLimitada ccl = new ContaCorrenteLimitada();
+            ccl = (ContaCorrenteLimitada) cd.procuraConta(ccl, varNumConta.getText(), varAgenciaExtrato.getText());
+            if (ex.converteData(varDataInicio.getText()) != null && ex.converteData(varDtaFim.getText()) != null) {
+
+                varDados.setText(ex.imprimeExtratoPeriodo(ccl, ex.converteData(varDataInicio.getText()),
+                        ex.converteData(varDtaFim.getText())));
+                
+            } else {
+                varDados.setText("" + ccl.getExtrato());
+            }
+            varNumConta.setText("");
+            varDataInicio.setText("");
+            varDtaFim.setText("");
+            varAgenciaExtrato.setText("");
+        } else {
+            JOptionPane.showMessageDialog(null, "Selecione um tipo de Conta!", "", ERROR_MESSAGE);
+        }
+
     }//GEN-LAST:event_btnOk4ActionPerformed
 
     private void varLimpar4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_varLimpar4ActionPerformed
@@ -1896,6 +2056,18 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
             JOptionPane.showMessageDialog(null, "Já Existe uma Conta com estes Dados!", "", ERROR_MESSAGE);
         }*/
     }//GEN-LAST:event_varNumeroContaFocusLost
+
+    private void varBuscar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_varBuscar1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_varBuscar1ActionPerformed
+
+    private void varNumeroConta4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_varNumeroConta4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_varNumeroConta4ActionPerformed
+
+    private void varAgenciaBloqueioDesbloqueioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_varAgenciaBloqueioDesbloqueioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_varAgenciaBloqueioDesbloqueioActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1938,14 +2110,17 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
     private javax.swing.JRadioButton btnCl;
     private javax.swing.JRadioButton btnCorrenteComum;
     private javax.swing.JRadioButton btnCorrenteComum3;
+    private javax.swing.JRadioButton btnCorrenteComumExtrato;
     private javax.swing.JRadioButton btnCorrenteLimitada;
     private javax.swing.JRadioButton btnCorrenteLimitada3;
+    private javax.swing.JRadioButton btnCorrenteLimitadaExtrato;
     private javax.swing.JButton btnCriarNovoCliente;
     private javax.swing.JButton btnLimpar;
     private javax.swing.JButton btnOk4;
     private javax.swing.JButton btnOkBuscar;
     private javax.swing.JRadioButton btnPoupanca;
     private javax.swing.JRadioButton btnPoupanca3;
+    private javax.swing.JRadioButton btnPoupancaExtrato;
     private javax.swing.JButton btnSair;
     private javax.swing.JButton btnSalvar2;
     private javax.swing.JButton btnSalvar3;
@@ -1973,12 +2148,15 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel36;
+    private javax.swing.JLabel jLabel37;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -2005,10 +2183,13 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JTextField varAgencia;
+    private javax.swing.JTextField varAgenciaBloqueioDesbloqueio;
+    private javax.swing.JTextField varAgenciaExtrato;
     private javax.swing.JComboBox<String> varAtivo;
     private javax.swing.JComboBox<String> varAtivo2;
     private javax.swing.JTextField varBairro;
     private javax.swing.JTextField varBuscar;
+    private javax.swing.JTextField varBuscar1;
     private javax.swing.JButton varBuscar2;
     private javax.swing.JFormattedTextField varCep;
     private javax.swing.JTextField varCidade;
@@ -2029,6 +2210,7 @@ public class TelaGerente extends javax.swing.JFrame implements Serializable {
     private javax.swing.JTextField varNumeroConta;
     private javax.swing.JTextField varNumeroConta2;
     private javax.swing.JTextField varNumeroConta3;
+    private javax.swing.JTextField varNumeroConta4;
     private javax.swing.JTextField varPais;
     private javax.swing.JFormattedTextField varRendaMensal;
     private javax.swing.JTextField varRg;

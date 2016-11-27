@@ -20,6 +20,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import org.hibernate.engine.jdbc.spi.ExtractedDatabaseMetaData;
 
 /**
@@ -61,11 +63,13 @@ public class ContaCorrenteComum extends Conta implements Serializable {
         ContaCorrenteComum ccc = new ContaCorrenteComum();
         ccc = (ContaCorrenteComum)cd.procuraConta(ccc, conta, agencia);
         ccc.setSaldo(ccc.getSaldo() + valor);
-        cd.modifica(ccc);
+        cd.atualizar(ccc);
         String dados = "Valor depositado: " + valor + "\nTelefone: " + telefone;
         Date dt = ex.converteData(dta);
         ex.gravaExtrato(ccc, dados, conta, agencia, dt);
     }
+    
+    //public void retirada()
 
     //metodo para alterar de ativo para inativo
     public static boolean verificaAtivo(String texto) {
@@ -74,5 +78,31 @@ public class ContaCorrenteComum extends Conta implements Serializable {
         } else {
             return false;
         }
+    }
+    
+    public void retirada(ContaCorrenteComum ccc, double valor) {
+        ClasseDAO cd = new ClasseDAO();
+        Transacao tx = new Transacao();
+        double saldo;
+        if (ccc.getSaldo() >= valor) {
+            
+            Calendar cl = Calendar.getInstance();
+            int dia, mes, ano;
+            mes = cl.get(Calendar.MONTH) + 1;
+            dia = cl.get(Calendar.DAY_OF_MONTH);
+            ano = cl.get(Calendar.YEAR);
+            String dta = "" + dia + "/" + mes + "/" + ano;
+            Date dt = tx.converteData(dta);
+            saldo = ccc.getSaldo() - valor;
+            ccc.setSaldo(saldo);
+            cd.atualizar(ccc);
+            String dados = "\nRetirada de R$" + valor;
+            ccc = (ContaCorrenteComum) tx.gravaExtrato(ccc,dados, ccc.getNumero(), ccc.getAgencia(), dt);
+            cd.atualizar(ccc);
+
+        } else {
+            JOptionPane.showMessageDialog(null, "Você não possui Saldo Suficiente, seu saldo é: R$" + ccc.getSaldo(), "", ERROR_MESSAGE);
+        }
+
     }
 }

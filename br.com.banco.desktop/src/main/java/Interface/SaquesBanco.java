@@ -5,15 +5,14 @@
  */
 package Interface;
 
-import Classes.Cliente;
-import Classes.Conta;
 import Classes.ContaCorrenteComum;
 import Classes.ContaCorrenteLimitada;
 import Classes.ContaPoupanca;
-import Classes.Deposito;
 import Classes.Transacao;
+import Hibernate.ClasseDAO;
+import java.util.ArrayList;
+import java.util.Date;
 import javax.swing.JOptionPane;
-import static javax.swing.JOptionPane.ERROR_MESSAGE;
 
 /**
  *
@@ -30,72 +29,29 @@ public class SaquesBanco extends javax.swing.JFrame {
 
     }
 
-    public void gravaExtrato(Object cliente, String dados) {
+    public void retira(Object cliente, double valor) {
         if (cliente instanceof ContaPoupanca) {
             ContaPoupanca cp = new ContaPoupanca();
             cp = (ContaPoupanca) cliente;
-            ex.gravaLog(cp.getNumero().trim(), dados);
+            cp.retirada(cp, valor);
         }
         if (cliente instanceof ContaCorrenteComum) {
             ContaCorrenteComum ccc = new ContaCorrenteComum();
             ccc = (ContaCorrenteComum) cliente;
-            ex.gravaLog(ccc.getNumero().trim(), dados);
+            ccc.retirada(ccc, valor);
         }
         if (cliente instanceof ContaCorrenteLimitada) {
             ContaCorrenteLimitada ccl = new ContaCorrenteLimitada();
             ccl = (ContaCorrenteLimitada) cliente;
-            ex.gravaLog(ccl.getNumero().trim(), dados);
+            ccl.retirada(ccl, valor);
         }
     }
+
+    
 
     /**
      * Creates new form SaquesBanco
      */
-    public boolean deposito(double v1) {
-        if (cliente instanceof ContaPoupanca) {
-            ContaPoupanca cp = new ContaPoupanca();
-            cp = (ContaPoupanca) cliente;
-            Deposito dp = new Deposito(cp.getNumero(), cp.getAgencia(), -v1, cp.getCli().getTelefone());
-            if (cp.getSaldo() <= 0 || cp.getSaldo() < v1) {
-                JOptionPane.showMessageDialog(null, "Não Há saldo Suficiente, seu saldo é: " + cp.getSaldo(), "", ERROR_MESSAGE);
-                cliente = ContaPoupanca.Leitura(cp.getNumero());
-                return false;
-            } else {
-                dp.deposita(dp, cliente);
-                cliente = ContaPoupanca.Leitura(cp.getNumero());
-                return true;
-            }
-        } else if (cliente instanceof ContaCorrenteComum) {
-            ContaCorrenteComum ccc = new ContaCorrenteComum();
-            ccc = (ContaCorrenteComum) cliente;
-            Deposito dp = new Deposito(ccc.getNumero(), ccc.getAgencia(), -v1, ccc.getCli().getTelefone());
-            if (ccc.getSaldo() <= 0 || ccc.getSaldo() < v1) {
-                JOptionPane.showMessageDialog(null, "Não Há saldo Suficiente, seu saldo é: " + ccc.getSaldo(), "", ERROR_MESSAGE);
-                cliente = ContaCorrenteComum.Leitura(ccc.getNumero());
-
-                return false;
-            } else {
-                dp.deposita(dp, cliente);
-                cliente = ContaCorrenteComum.Leitura(ccc.getNumero());
-                return true;
-            }
-        } else if (cliente instanceof ContaCorrenteLimitada) {
-            ContaCorrenteLimitada ccl = new ContaCorrenteLimitada();
-            ccl = (ContaCorrenteLimitada) cliente;
-            Deposito dp = new Deposito(ccl.getNumero(), ccl.getAgencia(), -v1, ccl.getCli().getTelefone());
-            if (ccl.getSaldo() <= 0 || ccl.getSaldo() < v1) {
-                JOptionPane.showMessageDialog(null, "Não Há saldo Suficiente, seu saldo é: " + ccl.getSaldo(), "", ERROR_MESSAGE);
-                cliente = ContaCorrenteLimitada.Leitura(ccl.getNumero());
-                return false;
-            } else {
-                dp.deposita(dp, cliente);
-                cliente = ContaCorrenteLimitada.Leitura(ccl.getNumero());
-                return true;
-            }
-        }
-        return false;
-    }
-
     public SaquesBanco(Object cli) {
         initComponents();
         cliente = cli;
@@ -291,76 +247,66 @@ public class SaquesBanco extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSacar50ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSacar50ActionPerformed
-        if (deposito(50)) {
-            String dados = "";
-            dados = "Retirada de: R$50,00\n";
-            gravaExtrato(cliente, dados);
-        }
+        retira(cliente, 50);
     }//GEN-LAST:event_btnSacar50ActionPerformed
 
     private void btnSacar100ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSacar100ActionPerformed
-        if (deposito(100)) {
-            String dados = "";
-            dados = "Retirada de: R$100,00\n";
-            gravaExtrato(cliente, dados);
-        }
+        retira(cliente, 100);
     }//GEN-LAST:event_btnSacar100ActionPerformed
 
     private void btnSacar300ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSacar300ActionPerformed
-        if (deposito(300)) {
-            String dados = "";
-            dados = "Retirada de: R$300,00\n";
-            gravaExtrato(cliente, dados);
-        }
+        retira(cliente, 300);
     }//GEN-LAST:event_btnSacar300ActionPerformed
 
     private void btnSacar500ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSacar500ActionPerformed
-        if (deposito(500)) {
-            String dados = "";
-            dados = "Retirada de: R$500,00\n";
-            gravaExtrato(cliente, dados);
-        }
+        retira(cliente, 500);
     }//GEN-LAST:event_btnSacar500ActionPerformed
 
     private void btnSacar700ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSacar700ActionPerformed
-        if (deposito(700)) {
-            String dados = "";
-            dados = "Retirada de: R$700,00\n";
-            gravaExtrato(cliente, dados);
-        }
+        retira(cliente, 700);
     }//GEN-LAST:event_btnSacar700ActionPerformed
 
     private void bntExtratoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntExtratoActionPerformed
         Transacao ex = new Transacao();
+        ClasseDAO cd = new ClasseDAO();
+        ArrayList<Transacao> ext = new ArrayList<>();
         if (cliente instanceof ContaPoupanca) {
             ContaPoupanca cp = new ContaPoupanca();
             cp = (ContaPoupanca) cliente;
-            new TelaExtrato(ex.retiraExtrato(cp.getNumero())).setVisible(true);
+            cp = (ContaPoupanca) cd.procuraConta(cliente, cp.getNumero(), cp.getAgencia());
+            new TelaExtrato("" + cp.getExtrato()).setVisible(true);
         }
         if (cliente instanceof ContaCorrenteComum) {
             ContaCorrenteComum ccc = new ContaCorrenteComum();
             ccc = (ContaCorrenteComum) cliente;
-            new TelaExtrato(ex.retiraExtrato(ccc.getNumero())).setVisible(true);
+            ccc = (ContaCorrenteComum) cd.procuraConta(cliente, ccc.getNumero(), ccc.getAgencia());
+            new TelaExtrato("" + ccc.getExtrato()).setVisible(true);
         }
         if (cliente instanceof ContaCorrenteLimitada) {
             ContaCorrenteLimitada ccl = new ContaCorrenteLimitada();
             ccl = (ContaCorrenteLimitada) cliente;
-            new TelaExtrato(ex.retiraExtrato(ccl.getNumero())).setVisible(true);
+            ccl = (ContaCorrenteLimitada) cd.procuraConta(cliente, ccl.getNumero(), ccl.getAgencia());
+            new TelaExtrato("" + ccl.getExtrato()).setVisible(true);
         }
     }//GEN-LAST:event_bntExtratoActionPerformed
 
     private void varSaldoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_varSaldoActionPerformed
+        ClasseDAO cd = new ClasseDAO();
         if (cliente instanceof ContaPoupanca) {
+
             ContaPoupanca cp = new ContaPoupanca();
             cp = (ContaPoupanca) cliente;
+            cp = (ContaPoupanca) cd.procuraConta(cp, cp.getNumero(), cp.getAgencia());
             JOptionPane.showMessageDialog(null, "Seu Saldo é: R$" + cp.getSaldo());
         } else if (cliente instanceof ContaCorrenteComum) {
             ContaCorrenteComum ccc = new ContaCorrenteComum();
             ccc = (ContaCorrenteComum) cliente;
+            ccc = (ContaCorrenteComum) cd.procuraConta(ccc, ccc.getNumero(), ccc.getAgencia());
             JOptionPane.showMessageDialog(null, "Seu Saldo é: R$" + ccc.getSaldo());
         } else if (cliente instanceof ContaCorrenteLimitada) {
             ContaCorrenteLimitada ccl = new ContaCorrenteLimitada();
             ccl = (ContaCorrenteLimitada) cliente;
+            ccl = (ContaCorrenteLimitada) cd.procuraConta(ccl, ccl.getNumero(), ccl.getAgencia());
             JOptionPane.showMessageDialog(null, "Seu Saldo é: R$" + ccl.getSaldo());
         }
     }//GEN-LAST:event_varSaldoActionPerformed
@@ -371,34 +317,15 @@ public class SaquesBanco extends javax.swing.JFrame {
 
     private void btnSacarOutroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSacarOutroActionPerformed
         double valor = Double.valueOf(JOptionPane.showInputDialog(null, "Digite o Valor"));
-        if (deposito(valor)) {
-            String dados = "";
-            dados = "Retirada de: R$" + valor + "\n";
-            gravaExtrato(cliente, dados);
-        }
+        retira(cliente, valor);
     }//GEN-LAST:event_btnSacarOutroActionPerformed
 
     private void btnExPeriodoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExPeriodoActionPerformed
-        Transacao ex = new Transacao();
-        String dtaInicio;
-        String dtaFim;
-        dtaInicio = JOptionPane.showInputDialog("Digite a Data Inicial do Periodo \nEx: 10/10/2010");
-        dtaFim = JOptionPane.showInputDialog("Digite a Data Final do Periodo \nEx: 10/10/2010");
-        if (cliente instanceof ContaPoupanca) {
-            ContaPoupanca cp = new ContaPoupanca();
-            cp = (ContaPoupanca) cliente;
-            new TelaExtrato(ex.extratoPeriodo(cp.getNumero(), dtaInicio, dtaFim)).setVisible(true);
-        }
-        if (cliente instanceof ContaCorrenteComum) {
-            ContaCorrenteComum ccc = new ContaCorrenteComum();
-            ccc = (ContaCorrenteComum) cliente;
-            new TelaExtrato(ex.extratoPeriodo(ccc.getNumero(), dtaInicio, dtaFim)).setVisible(true);
-        }
-        if (cliente instanceof ContaCorrenteLimitada) {
-            ContaCorrenteLimitada ccl = new ContaCorrenteLimitada();
-            ccl = (ContaCorrenteLimitada) cliente;
-            new TelaExtrato(ex.extratoPeriodo(ccl.getNumero(), dtaInicio, dtaFim)).setVisible(true);
-        }
+        Transacao tx = new Transacao();
+        Date ini, fim;
+        ini = ex.converteData(JOptionPane.showInputDialog("Digite a Data inicial: EX: DD/MM/AAAA"));
+        fim = ex.converteData(JOptionPane.showInputDialog("Digite a Data Final: EX: DD/MM/AAAA"));
+        new TelaExtrato(tx.imprimeExtratoPeriodo(cliente, ini, fim)).setVisible(true);
     }//GEN-LAST:event_btnExPeriodoActionPerformed
 
     /**

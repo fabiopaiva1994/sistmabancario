@@ -14,6 +14,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.ERROR_MESSAGE;
 
 /**
  *
@@ -86,5 +88,31 @@ public class ContaCorrenteLimitada extends Conta implements Serializable{
         }catch(NumberFormatException e) {
             return 0;
         }
+    }
+    
+    public void retirada(ContaCorrenteLimitada ccl, double valor) {
+        ClasseDAO cd = new ClasseDAO();
+        Transacao tx = new Transacao();
+        double saldo;
+        if (ccl.getSaldo() >= valor) {
+            
+            Calendar cl = Calendar.getInstance();
+            int dia, mes, ano;
+            mes = cl.get(Calendar.MONTH) + 1;
+            dia = cl.get(Calendar.DAY_OF_MONTH);
+            ano = cl.get(Calendar.YEAR);
+            String dta = "" + dia + "/" + mes + "/" + ano;
+            Date dt = tx.converteData(dta);
+            saldo = ccl.getSaldo() - valor;
+            ccl.setSaldo(saldo);
+            cd.atualizar(ccl);
+            String dados = "\nRetirada de R$" + valor;
+            ccl = (ContaCorrenteLimitada) tx.gravaExtrato(ccl,dados, ccl.getNumero(), ccl.getAgencia(), dt);
+            cd.atualizar(ccl);
+
+        } else {
+            JOptionPane.showMessageDialog(null, "Você não possui Saldo Suficiente, seu saldo é: R$" + ccl.getSaldo(), "", ERROR_MESSAGE);
+        }
+
     }
 }

@@ -217,11 +217,11 @@ public class ClasseDAO {
         return (List<Object>) cri.list();
     }
 
-    public ArrayList<Transacao> buscaExtrato(String conta) {
+    public ArrayList<Transacao> buscaExtrato(long id) {
         try {
             this.session = HibernateUtil.getSessionFactory().openSession();
             Criteria cri = (Criteria) session.createCriteria(Transacao.class)
-                    .add(Restrictions.eq("", conta)).list();
+                    .add(Restrictions.eq("cliente_id", id)).list();
             return (ArrayList<Transacao>) cri;
         } catch (HibernateException e) {
             return null;
@@ -229,6 +229,7 @@ public class ClasseDAO {
             this.session.close();
         }
     }
+    
 
     public Object procuraConta(Object obj, String numero, String agencia) {
         session = HibernateUtil.getSessionFactory().openSession();
@@ -320,4 +321,6 @@ public class ClasseDAO {
         return (Object) cri.uniqueResult();
 
     }
+    
+    
 }
