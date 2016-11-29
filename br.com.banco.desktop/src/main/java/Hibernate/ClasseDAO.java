@@ -48,17 +48,6 @@ public class ClasseDAO {
         }
     }
 
-    public void alterarAluno(Object a) {
-        try {
-            org.hibernate.Transaction tx = this.session.beginTransaction();
-            this.session.update(a);
-            tx.commit();
-            this.session.close();
-        } catch (HibernateException erro) {
-            JOptionPane.showMessageDialog(null, "Ocorreu um erro contate o Suporte");
-        }
-    }
-
     public void atualizar(Object cliente) {
 
         try {
@@ -95,120 +84,21 @@ public class ClasseDAO {
         }
     }
 
-    public void alteraEquipamento(Object eq) {
-        try {
-            org.hibernate.Transaction tx = this.session.beginTransaction();
-            this.session.update(eq);
-            tx.commit();
-            this.session.close();
-        } catch (HibernateException err) {
-            JOptionPane.showMessageDialog(null, "Ocorreu um erro contate o Suporte");
-        }
-    }
-
-    public void alterarAtendente(Object a) {
-        try {
-            org.hibernate.Transaction tx = this.session.beginTransaction();
-            this.session.update(a);
-            tx.commit();
-            session.close();
-        } catch (HibernateException erro) {
-            JOptionPane.showMessageDialog(null, "Ocorreu um erro contate o suporte");
-        }
-    }
-
-    public void alterarAdministrador(Object a) {
-        try {
-            org.hibernate.Transaction tx = this.session.beginTransaction();
-            this.session.update(a);
-            tx.commit();
-            session.close();
-        } catch (HibernateException erro) {
-            JOptionPane.showMessageDialog(null, "Ocorreu um erro contate o suporte");
-        }
-    }
-
-    public void alterarPersonal(Object a) {
-        try {
-            org.hibernate.Transaction tx = this.session.beginTransaction();
-            this.session.update(a);
-            tx.commit();
-            session.close();
-        } catch (HibernateException erro) {
-            JOptionPane.showMessageDialog(null, "Ocorreu um erro contate o suporte");
-        }
-    }
-
-    public void excluirAluno(Object a) throws RollbackException {
-        org.hibernate.Transaction tx = this.session.beginTransaction();
-        this.session.delete(a);
-        tx.commit();
-        session.close();
-    }
-
-    public Object procura(Long id, Object ob) {
-        return (Object) this.session.load(Object.class, id);
-    }
-
-    public Object procura(String nome) {
-        return (Object) this.session.load(Object.class, nome);
-    }
-
-    public List<Object> listaTudo() {
-        return this.session.createCriteria(
-                Object.class).list();
-    }
-
-    public List<Object> listaTudoP() {
-        return this.session.createCriteria(
-                Object.class).list();
-    }
-
-    public List<Object> listaTudoL() {
-        session.beginTransaction();
-        return this.session.createCriteria(Object.class).list();
-    }
-
-    public List<Object> listarTudoG() {
-        session.beginTransaction();
-        return this.session.createCriteria(Object.class).list();
-    }
-
     public List<Object> listarTudoA() {
         session.beginTransaction();
         return this.session.createCriteria(Object.class).list();
     }
 
-    public Object buscarNomeEquipamento(String nome) {
-        session.beginTransaction();
-        Criteria cri = session.createCriteria(Object.class)
-                .add(Restrictions.eq("nomeequip", nome));
-        return (Object) cri.uniqueResult();
-    }
+    
 
-    public Object buscaCodEqui(String cod) {
-        session.beginTransaction();
-        Criteria cri = session.createCriteria(Object.class)
-                .add(Restrictions.eq("idEquipamento", cod));
-        return (Object) cri.uniqueResult();
-    }
+    
 
     public List<Object> buscarEquipamento() {
         session.beginTransaction();
         return session.createCriteria(Object.class).list();
     }
 
-    public Object bucar(String nome) {
-        try {
-            session.beginTransaction();
-            Criteria cri = session.createCriteria(Object.class)
-                    .add(Restrictions.eq("nome", nome));
-            return (Object) cri.uniqueResult();
-        } catch (HibernateException erro) {
-            JOptionPane.showMessageDialog(null, "Houve um Erro contate o suporte");
-            return null;
-        }
-    }
+    
 
     public List<Object> buscarAtivo() {
         session.beginTransaction();
@@ -277,50 +167,5 @@ public class ClasseDAO {
         } finally {
             session.close();
         }
-    }
-
-    public Object procuraLogin(String nome) {
-        session.beginTransaction();
-        Criteria cri = session.createCriteria(Object.class)
-                .add(Restrictions.eq("login", nome));
-        return (Object) cri.uniqueResult();
-    }
-
-    public Object procuraId(String id) {
-        session.beginTransaction();
-        Criteria cri = session.createCriteria(Object.class)
-                .add(Restrictions.eq("codFunc", id));
-        return (Object) cri.uniqueResult();
-    }
-
-    public Object procuraNomeA(String nome) {
-        session.beginTransaction();
-        Criteria cri = session.createCriteria(Object.class)
-                .add(Restrictions.eq("nome", nome));
-        return (Object) cri.uniqueResult();
-    }
-
-    public Object procuraIdA(String id) {
-        session.beginTransaction();
-        Criteria cri = session.createCriteria(Object.class)
-                .add(Restrictions.eq("codFunc", id));
-        return (Object) cri.uniqueResult();
-    }
-
-    public Object procuraNomeP(String nome) {
-        this.session.beginTransaction();
-        Criteria cri = session.createCriteria(Object.class)
-                .add(Restrictions.eq("nome", nome));
-        return (Object) cri.uniqueResult();
-    }
-
-    public Object procuraIdP(String id) {
-        session.beginTransaction();
-        Criteria cri = session.createCriteria(Object.class)
-                .add(Restrictions.eq("codFunc", id));
-        return (Object) cri.uniqueResult();
-
-    }
-    
-    
+    }   
 }
